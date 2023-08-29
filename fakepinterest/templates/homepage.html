@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block titulo %}
+        Ponterest
+        {% endblock %}
+    </title>
+    <link rel='stylesheet' type='text/css' href='{{ url_for("static", filename="css/style.css") }}'>
+    <script src="script.js"></script>
+</head>
+
+{% block body %}
+<body> 
+
+        <header class="header">
+                
+                <div class="logo">
+                        <img src="{{ url_for('static', filename='fotos_site/logo_pinterest.png') }}">
+                        <span> Ponterest</span>
+                </div>
+                
+                <div class="login_cadastrar">
+                        
+                        <span class="botao_login" id="botao_login"> Entrar 2</span>
+                        
+                        <span class="botao_cadastrar"> Criar Conta </span>
+                </div>
+                
+        </header>
+
+        <main class='main'>
+        
+                <div class="forms" id="forms">
+                        {% include 'login.html' %}
+                        {% include 'criarconta.html' %}
+                </div>
+                
+                <p>main</p>
+         
+        </main>
+        <script>
+        // Função que será chamada quando o botão for clicado
+        function mostrarJanela() {
+                var elemento = document.getElementById("forms");
+                elemento.style.display = "block"; // Altera a propriedade display para "block"
+        }
+        
+        // Obtendo uma referência ao botão
+        var botao = document.getElementById("botao_login");
+        
+        // Adicionando um ouvinte de evento para o clique no botão
+        botao.addEventListener("click", mostrarJanela);
+        </script>
+        
+</body>
+{% endblock %}
+
+</html>

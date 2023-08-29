@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block titulo %}
+        Ponterest
+        {% endblock %}
+    </title>
+    <link rel='stylesheet' type='text/css' href='{{ url_for("static", filename="css/style.css") }}'>
+</head>
+
+{% block body %}
+<body>
+        <header>
+                
+                <div class="logo">
+                        <img src="{{ url_for('static', filename='fotos_site/logo_pinterest.png') }}">
+                        <span> Ponterest</span>
+                </div>
+                
+                <div class="login_cadastrar">
+                        <a href="#" class="botao_login"> Entrar </a>
+                        <a href="#" class="botao_cadastrar"> Criar conta </a>
+                </div>
+                
+
+        </header>
+
+
+<main>
+        {% block formulario %}
+        <form class='login' method="POST" class='form_login'>
+            {{ form.csrf_token }}
+        
+                {{ form.email.label()}}
+                {% if form.email.errors %}
+                        {% for erro in form.email.errors %}
+                                <p style="color: red">{{ erro }}</p>
+                        {% endfor %}
+                {% endif %}
+                {{ form.email()}}
+        
+                {{form.senha.label()}}
+                {% if form.senha.errors %}
+                        {% for erro in form.senha.errors %}
+                                <p style="color: red">{{ erro }}</p>
+                        {% endfor %}
+                {% endif %}
+                {{form.senha()}}
+        
+                {{form.botao_confirmacao()}}
+        </form>
+        
+        <a href=" {{ url_for('criar_conta')}}">Ainda não tem uma conta? Clique aqui para criar</a>
+        {% endblock %}
+</main>
+
+</body>
+{% endblock %}
+</html>

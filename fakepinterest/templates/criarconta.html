@@ -1,0 +1,56 @@
+<form method="POST" class='form_cadastrar'>
+        <div class="form-group">
+                {{ form_criarconta.csrf_token }}
+                {{ form_criarconta.email.label() }}
+                {% if form_criarconta.email.errors %}
+                        {{ form_criarconta.email() }}
+                        {% for erro in form_criarconta.email.errors %}
+                                <p style="color: red">{{ erro }}</p>
+                        {% endfor %}
+                {% else %}
+                {{ form_criarconta.email() }}
+                {% endif %}
+        </div>
+
+        <div class="form-group">
+                {{ form_criarconta.username.label() }}
+                {% if form_criarconta.username.errors %}
+                        {{ form_criarconta.username() }}
+                        {% for erro in form_criarconta.username.errors %}
+                                <p style="color: red">{{ erro }}</p>
+                        {% endfor %}
+                {% else %}
+                {{ form_criarconta.username() }}
+                {% endif %}
+        </div>
+    
+        
+            
+        <div class="form-group">
+                {{ form_criarconta.senha.label() }}
+                {% if form_criarconta.senha.errors %}
+                        {{ form_criarconta.senha() }}
+                        {% for erro in form_criarconta.senha.errors %}
+                                <p style="color: red">{{ erro }}</p>
+                        {% endfor %}
+                {% else %}
+                {{ form_criarconta.senha() }}
+                {% endif %}
+        </div>
+    
+        <div class="form-group">
+                {{ form_criarconta.confirmacao_senha.label() }}
+                {% if form_criarconta.confirmacao_senha.errors %}
+                        {{ form_criarconta.confirmacao_senha() }}
+                        {% for erro in form_criarconta.confirmacao_senha.errors %}
+                                <p style="color: red">{{ erro }}</p>
+                        {% endfor %}
+                {% else %}
+                {{ form_criarconta.confirmacao_senha() }}
+                {% endif %}
+
+        </div>
+    
+        {{ form_criarconta.botao_confirmacao2() }}
+</form>
+

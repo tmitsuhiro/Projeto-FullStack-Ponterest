@@ -1,0 +1,29 @@
+<form method="POST" class='form_login'>
+{{ form_login.csrf_token }}
+
+<div class='form-group'>
+        {{ form_login.email.label()}}
+        {% if form_login.email.errors %}
+                {{ form_login.email() }}
+                {% for erro in form_login.email.errors %}
+                        <p style="color: red">{{ erro }}</p>
+                {% endfor %}
+        {% else %}
+                {{ form_login.email() }}
+        {% endif %}
+</div>
+    
+<div class='form-group'>
+        {{ form_login.senha.label()}}
+        {% if form_login.senha.errors %}
+                {{ form_login.senha() }}
+                {% for erro in form_login.senha.errors %}
+                        <p style="color: red">{{ erro }}</p>
+                {% endfor %}
+        {% else %}
+                {{ form_login.senha() }}
+        {% endif %}
+</div>
+    
+    {{form_login.botao_confirmacao()}}
+</form>

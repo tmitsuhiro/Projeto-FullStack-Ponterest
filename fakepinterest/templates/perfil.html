@@ -1,0 +1,42 @@
+{% extends "homepage.html" %}
+
+{% block titulo %}
+perfil - {{ usuario }}
+{% endblock %}
+
+{% block body %}
+<body>
+{% include "navbar.html" %}
+
+    <p>Perfil do usuário: {{ usuario.username }}</p>
+
+    {% if form %}
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.csrf_token }}
+
+        <div>
+            {{ form.foto() }}
+        </div>
+
+        <div>
+            {{ form.tema.label()}}
+            {{  form.tema() }}
+        </div>
+        {{ form.botao_confirmacao() }}
+
+    </form>
+    {% endif %}
+
+
+    {% for foto in usuario.fotos %}
+        <img src="{{ url_for('static', filename='fotos_posts/{}'.format(foto.imagem)) }}"/>
+        <p>
+            {{ foto.tema}}
+        </p>
+        
+    {% endfor %}
+
+
+</body>
+{% endblock %}
+
