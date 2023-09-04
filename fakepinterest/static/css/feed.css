@@ -1,0 +1,63 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Isso ajuda a evitar problemas de dimensionamento */
+  }
+
+
+header {
+    height: 70px;
+    display: flex;
+    align-items: center;
+}
+
+header > * {
+    margin-left: 30px;
+}
+
+form {
+    display: flex;
+}
+
+.form_tags {
+    display: block;
+}
+
+.search_icon{
+    width: 15px;
+    height: 15px;
+}
+
+.search_bar {
+    height: 20px;
+    width: 900px;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* .container{
+    display: flex;
+} */
+
+main {
+    display: flex;
+}
+
+.image {
+    width: 300px;
+    height: auto;
+}
+
+.container {
+    height: 400px;
+}
+
+.desablitado {
+    display: none;
+}
+
+.main_image {
+    width: 30vw
+}

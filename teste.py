@@ -1,7 +1,7 @@
-import secrets
+def teste(x):
+    return x + "a"
+lista1 = ['oi', 'ou', 'ai', 'ae']
 
-a = secrets.token_hex(10)
+lista2 = list(map(teste, lista1))
 
-print(a)
-
-
+print(lista2)

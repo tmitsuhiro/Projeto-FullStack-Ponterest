@@ -1,0 +1,51 @@
+{% extends "feed.html" %}
+
+{% block main %}
+
+<div class="container main_pin">
+    <img class="main_image" src="{{ url_for('static', filename='fotos_posts/{}'.format(foto.imagem)) }}"/>
+
+    <div class="descricao">
+        <p>{{ foto.titulo }}</p>
+        <p>{{ foto.descricao }}</p>
+        <a href="{{ url_for('perfil', username=dono_post.username) }}">
+            <p> {{ dono_post.username }}</p>
+        </a>
+
+        
+
+        <form method="post"  class="save_folder">
+
+            <label for="nome_pasta">escolha onde salvar</label>
+            {% for pasta in usuario.pastas %}            
+            <input id="nome_pasta"  type="submit" name="save_pasta" value="{{ pasta.titulo }}">
+            {% endfor %}
+
+        </form>
+        {% if salvo %}
+
+        {{ salvo.pasta.titulo }}
+
+        {% endif %}
+
+        
+        {{ request.form}}
+
+    </div>
+
+</div>
+
+<br>
+
+<div class="relacionados">
+    <h2>Pin relacionados</h2>
+
+    {% for foto in fotos_relacionados %}
+        <a href="{{ url_for('post', id_foto=foto.id) }}">
+            <img class="image" src="{{ url_for('static', filename='fotos_posts/{}'.format(foto.imagem)) }}"/>
+        </a>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "feed.html" %}
+
+{% block main %}
+
+{% for foto in fotos %}
+
+    <a href="{{ url_for('post', id_foto=foto.id) }}">
+        <img class="image" src="{{ url_for('static', filename='fotos_posts/{}'.format(foto.imagem)) }}"/>
+    </a>
+
+{% endfor %}
+
+{% endblock %}

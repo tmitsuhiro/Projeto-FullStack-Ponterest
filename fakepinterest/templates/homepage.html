@@ -4,58 +4,79 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        {% block titulo %}
         Ponterest
-        {% endblock %}
     </title>
-    <link rel='stylesheet' type='text/css' href='{{ url_for("static", filename="css/style.css") }}'>
-    <script src="script.js"></script>
+    <link rel='stylesheet' type='text/css' href='{{ url_for("static", filename="css/home.css") }}'>
+
 </head>
 
 {% block body %}
-<body> 
-
-        <header class="header">
+<body>    
+        
+        <div class="form_login form" >
+                {% include 'login.html' %}
+        </div>
                 
-                <div class="logo">
+        <div class="form_cadastrar form">
+                {% include 'criarconta.html' %}
+        </div>
+
+        <div class="container">
+                
+                <header>
                         <img src="{{ url_for('static', filename='fotos_site/logo_pinterest.png') }}">
-                        <span> Ponterest</span>
-                </div>
-                
-                <div class="login_cadastrar">
                         
-                        <span class="botao_login" id="botao_login"> Entrar 2</span>
-                        
-                        <span class="botao_cadastrar"> Criar Conta </span>
-                </div>
-                
-        </header>
+                        <p> Ponterest</p>
 
-        <main class='main'>
-        
-                <div class="forms" id="forms">
-                        {% include 'login.html' %}
-                        {% include 'criarconta.html' %}
-                </div>
+
+                        <div class="botoes">
                 
-                <p>main</p>
-         
-        </main>
+                                <button class="botao_login" id="botao_login"> Entrar </button>
+                
+                                <button class="botao_cadastrar"> Criar Conta </button>
+                        </div>
+                
+                </header>
+                <main>
+                        <div class="apresentacao">
+
+                        </div>
+                
+                </main>
+        </div>
+
+
         <script>
-        // Função que será chamada quando o botão for clicado
-        function mostrarJanela() {
-                var elemento = document.getElementById("forms");
-                elemento.style.display = "block"; // Altera a propriedade display para "block"
-        }
-        
-        // Obtendo uma referência ao botão
-        var botao = document.getElementById("botao_login");
-        
-        // Adicionando um ouvinte de evento para o clique no botão
-        botao.addEventListener("click", mostrarJanela);
+                let botao_login = document.querySelector(".botao_login")
+                let botao_cadastrar = document.querySelector(".botao_cadastrar")
+                let pagina = document.querySelector(".container")
+                let form_login = document.querySelector(".form_login")
+                let form_cadastrar = document.querySelector(".form_cadastrar")
+
+                botao_login.onclick = function(){
+                        if(!form_cadastrar.classList.contains("aberto")){
+                        form_login.classList.toggle("aberto")
+                        pagina.classList.toggle("inativo")
+                        }
+                }
+                botao_cadastrar.onclick = function(){
+                        if(!form_login.classList.contains("aberto")){
+                        form_cadastrar.classList.toggle("aberto")
+                        pagina.classList.toggle("inativo")
+                        }
+                }
+                pagina.onclick = function(e){
+                if (form_login.classList.contains("aberto") && !botao_login.contains(e.target)
+                 && !form_login.contains(e.target) && !botao_cadastrar.contains(e.target)) {
+                pagina.classList.remove("inativo");
+                form_login.classList.remove("aberto");
+                }if (form_cadastrar.classList.contains("aberto") && !botao_cadastrar.contains(e.target)
+                 && !form_cadastrar.contains(e.target) && !botao_login.contains(e.target)) {
+                pagina.classList.remove("inativo");
+                form_cadastrar.classList.remove("aberto");
+                }                
+                }
         </script>
-        
 </body>
 {% endblock %}
-
 </html>

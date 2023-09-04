@@ -1,42 +1,61 @@
-{% extends "homepage.html" %}
+{% extends "feed.html" %}
 
-{% block titulo %}
-perfil - {{ usuario }}
+{% block searchbar %}
+    <form action="#" class="search" method="POST">
+        <img class='search_icon' src='{{ url_for("static", filename="fotos_site/search_icon.png") }}'>
+        <input type="text" class="search_bar"  name="search" placeholder="pesquise nas suas fotos">
+    </form>
+
 {% endblock %}
 
-{% block body %}
-<body>
-{% include "navbar.html" %}
+{% block main %}
 
-    <p>Perfil do usuário: {{ usuario.username }}</p>
+    {% if usuario_visitado %}
 
-    {% if form %}
-    <form method="POST" enctype="multipart/form-data">
-        {{ form.csrf_token }}
+        <p>Perfil do usuário: {{ usuario_visitado.username }}</p>
 
-        <div>
-            {{ form.foto() }}
-        </div>
+        {% for foto in usuario_visitado.fotos %}
+            <img src="{{ url_for('static', filename='fotos_posts/{}'.format(foto.imagem)) }}"/>
+            <p>
+                {{ foto.tag}}
+            </p>
+            
+        {% endfor %}
 
-        <div>
-            {{ form.tema.label()}}
-            {{  form.tema() }}
-        </div>
-        {{ form.botao_confirmacao() }}
+    {% else %}
 
-    </form>
-    {% endif %}
-
-
-    {% for foto in usuario.fotos %}
-        <img src="{{ url_for('static', filename='fotos_posts/{}'.format(foto.imagem)) }}"/>
-        <p>
-            {{ foto.tema}}
-        </p>
+        <p>Perfil do usuário: {{ usuario.username }}</p>
         
-    {% endfor %}
+        <p class="botao_criar_pasta">+</p>
 
+        <form method="post">
+            <input type="text" name="nome_pasta" placeholder="De um nome para a pasta">
+        </form>
 
-</body>
+        <!-- <iframe class="desabilitado janela_criar_pasta"></iframe> -->
+            
+
+        {% for foto in usuario.fotos %}
+            <a href="{{ url_for('post', id_foto=foto.id) }}">
+                <img class="image" src="{{ url_for('static', filename='fotos_posts/{}'.format(foto.imagem)) }}"/>
+            </a>
+        
+        {% endfor %}
+
+        {% for pasta in usuario.pastas %}
+
+            <a href="{{ url_for('pasta', username=usuario.username, nome_pasta=pasta.titulo) }}">
+                <p>{{ pasta.titulo }}</p>
+            </a>
+            {% for foto in pasta.fotos_salvas[:3] %}
+                <a href="{{ url_for('post', id_foto=foto.id) }}">
+                    <img class="image" src="{{ url_for('static', filename='fotos_posts/{}'.format(foto.foto_imagem)) }}"/>
+                </a>
+            {% endfor %}
+
+        {% endfor %}
+
+    {% endif %}
+<p>{{ request.form }}</p>
 {% endblock %}
 

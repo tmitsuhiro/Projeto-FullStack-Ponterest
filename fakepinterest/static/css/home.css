@@ -1,0 +1,104 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+header {
+  display: flex;
+  width: 100%;
+  height: 80px;
+  background-color: rgb(255, 255, 255);
+  align-items: center;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Helvetica, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", メイリオ, Meiryo, "ＭＳ Ｐゴシック", Arial, sans-serif;;
+  font-weight: 600;
+  border-bottom: 2px, solid, black;
+}
+
+p{
+  flex: 30%;
+  color: #8404e4;;
+  font-size: 20px;
+  letter-spacing: -1px;
+  display: flex
+}
+
+header > img {
+  width: 35px;
+  margin-left: 15px;
+  margin-right: 5px;
+}
+
+.login_cadastrar {
+  flex:80%;
+  text-align: right;
+}
+
+.botoes * {
+  margin-right: 20px;
+  text-decoration: none;
+  border-radius: 20px;
+  padding: 10px 15px;
+  cursor: pointer;
+  border: 0;
+  font-size: 15px;
+  font-weight: 540;
+}
+
+.botao_login {
+  background-color: #8404e4;
+  color: white;
+}
+
+.botao_cadastrar {
+  background-color: rgb(212, 212, 212);
+  color: black;
+}
+
+
+
+/* MAIN */
+
+main {
+  width: 100%;
+  height:88vh;
+  background-color: black;
+  background: url(../fotos_site/home_fundo.jpg) repeat 0 0;
+  background-size: contain;
+}
+
+form {
+  margin-top: 60px;
+}
+
+.form{
+  position: absolute;
+  top: 0px;
+  left: 32.5%;
+  height: 100vh;
+  width: 35%;
+  border-radius: 45px;
+  background-color: white;
+  text-align: center;
+  display:none;
+  z-index: 999;
+}
+
+.form_login{
+  display: none;
+}
+.form_cadastrar{
+  display: none;
+}
+
+.inativo {
+  filter: brightness(40%)
+}
+
+.aberto {
+  display: block;
+}
+
+.fechado {
+  display: none;
+}

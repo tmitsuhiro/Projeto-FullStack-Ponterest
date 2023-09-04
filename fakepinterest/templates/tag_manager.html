@@ -1,0 +1,18 @@
+<form action="#" method="post" class="form_tags">
+    <label for="tag">Tags</label>
+    <input type="text" id="tag" name="tag" placeholder="adicione uma tag">
+
+     {% if tag_list %}
+        {% for tag in tag_list[1:] %}
+            <div class="tag" style="display: flex;">
+                <p> {{ tag }} </p>
+                <form method="post">
+                    <input type="text" name="delete" value="{{ tag }}" style="display: none;">
+                    <input type="submit" value="x">
+                </form>
+            </div>
+        {% endfor %}
+    {% endif %}
+</form>
+
+<p>{{ request.form }}</p>
