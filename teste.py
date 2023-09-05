@@ -1,7 +1,8 @@
-def teste(x):
-    return x + "a"
-lista1 = ['oi', 'ou', 'ai', 'ae']
 
-lista2 = list(map(teste, lista1))
+from random import shuffle
 
-print(lista2)
+lista1 = ['oi', 'ou', 'ai', 'ae', 'gf', 'one', 'pice']
+
+shuffle(lista1)
+
+print(lista1)

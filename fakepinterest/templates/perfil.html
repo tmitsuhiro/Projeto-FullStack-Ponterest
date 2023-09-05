@@ -37,7 +37,7 @@
 
         {% for foto in usuario.fotos %}
             <a href="{{ url_for('post', id_foto=foto.id) }}">
-                <img class="image" src="{{ url_for('static', filename='fotos_posts/{}'.format(foto.imagem)) }}"/>
+                <img class="foto" src="{{ url_for('static', filename='fotos_posts/{}'.format(foto.imagem)) }}"/>
             </a>
         
         {% endfor %}
@@ -49,7 +49,7 @@
             </a>
             {% for foto in pasta.fotos_salvas[:3] %}
                 <a href="{{ url_for('post', id_foto=foto.id) }}">
-                    <img class="image" src="{{ url_for('static', filename='fotos_posts/{}'.format(foto.foto_imagem)) }}"/>
+                    <img class="foto" src="{{ url_for('static', filename='fotos_posts/{}'.format(foto.foto_imagem)) }}"/>
                 </a>
             {% endfor %}
 

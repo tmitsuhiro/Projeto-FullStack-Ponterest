@@ -1,34 +1,48 @@
-{% extends "feed.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel='stylesheet' type='text/css' href='{{ url_for("static", filename="css/criarfoto.css") }}'>
+</head>
+    <body>
+        {% include 'header.html' %}
 
-{% block main %}
+        <main>
+            <div class="container_criarfoto">
 
-<form method="POST" enctype="multipart/form-data">
-    {{ form.csrf_token }}
+                <div class="escolher_pasta"></div>
+            
+                <form class="form_criarfoto" method="POST" enctype="multipart/form-data">
+                    {{ form.csrf_token }}
 
-    <div>
-        {{ form.foto() }}
-    </div>
+                    {{ form.foto(class="form_arquivo") }}
 
-    <div>
-    
-        {{ form.titulo.label()}}
-        {{  form.titulo() }}
+                    <div class="preencher">
+                        
 
-        {{ form.descricao.label()}}
-        {{  form.descricao() }}
+                        {{  form.titulo(class="box_titulo box", placeholder="Adicione um título") }}
 
+                        <hr>
 
-    </div>
-    
+                        {{ current_user.username }}
 
+                        {{  form.descricao(class="box_descricao box", placeholder="Adicione uma descrição") }}
+                        <hr>
+                        
+                        <iframe class="tags_iframe" src="{{ url_for('tag_manager')}}" ></iframe>
+                        {{ form.botao_confirmacao(class="botao_criarfoto") }}
+                    </div>
+            
+                </form>
 
-    {{ form.botao_confirmacao() }}
+                
 
-</form>
-
-<iframe src="{{ url_for('tag_manager')}}" style="width:50vw"></iframe>
-
-
-<p>{{ tag_usuario.tags }}</p>
-
-{% endblock %}
+                <p>{{ tag_usuario.tags }}</p>
+            
+            </div>
+        </main>
+        
+    </body>
+</html>

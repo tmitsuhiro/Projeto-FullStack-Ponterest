@@ -1,0 +1,52 @@
+<link rel='stylesheet' type='text/css' href='{{ url_for("static", filename="css/home.css") }}'>
+
+<img class="logo_form logo" src="{{ url_for('static', filename='fotos_site/logo_pinterest.png') }}">
+
+<h1 class="titulo_form">Bem vindo(a) ao Ponterest</h1>
+
+<form method="POST" class="form_cadastro form">
+
+                {{ form_cadastro.csrf_token }}
+                <p class="label">{{ form_cadastro.email.label() }}</p>
+                {% if form_cadastro.email.errors %}
+                        {{ form_cadastro.email(class="box", placeholder="Email") }}
+                        {% for erro in form_cadastro.email.errors %}
+                                <p>{{ erro }}</p>
+                        {% endfor %}
+                {% else %}
+                        {{ form_cadastro.email(class="box", placeholder="Email") }}
+                {% endif %}
+
+                <p class="label">{{ form_cadastro.username.label() }}</p>
+                {% if form_cadastro.username.errors %}
+                        {{ form_cadastro.username(class="box", placeholder="Nome de usuário") }}
+                        {% for erro in form_cadastro.username.errors %}
+                                <p>{{ erro }}</p>
+                        {% endfor %}
+                {% else %}
+                        {{ form_cadastro.username(class="box", placeholder="Nome de usuário") }}
+                {% endif %}
+
+                <p class="label">{{ form_cadastro.senha.label() }}</p>
+                {% if form_cadastro.senha.errors %}
+                        {{ form_cadastro.senha(class="box", placeholder="Senha") }}
+                        {% for erro in form_cadastro.senha.errors %}
+                                <p>{{ erro }}</p>
+                        {% endfor %}
+                {% else %}
+                        {{ form_cadastro.senha(class="box", placeholder="Senha") }}
+                {% endif %}
+
+                {{ form_cadastro.confirmacao_senha.label() }}
+                {% if form_cadastro.confirmacao_senha.errors %}
+                        {{ form_cadastro.confirmacao_senha(class="box", placeholder="Senha") }}
+                        {% for erro in form_cadastro.confirmacao_senha.errors %}
+                                <p>{{ erro }}</p>
+                        {% endfor %}
+                {% else %}
+                        {{ form_cadastro.confirmacao_senha(class="box", placeholder="Confirme a senha") }}
+                {% endif %}
+    
+        {{ form_cadastro.botao_confirmacao2(class="botao") }}
+</form>
+

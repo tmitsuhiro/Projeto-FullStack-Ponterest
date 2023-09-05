@@ -2,62 +2,68 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box; /* Isso ajuda a evitar problemas de dimensionamento */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Helvetica, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", メイリオ, Meiryo, "ＭＳ Ｐゴシック", Arial, sans-serif;
+
   }
 
 
-header {
-    height: 70px;
-    display: flex;
-    align-items: center;
+
+
+
+/* MAIN FEED */
+
+.fotos_container {
+    width: 1250px;
+    margin: 20px auto;
+    columns: 4;
+    column-gap: 15px;
+
 }
 
-header > * {
-    margin-left: 30px;
+.fotos_container .box{
+    width: 100%;
+    margin-bottom: 30px;
+    break-inside: avoid;
+
 }
 
-form {
+.fotos_container .box img{
+    border-radius: 20px;
+    width: 100%;
+    
+}
+
+
+/* CRIAR FOTO */
+
+main.criarfoto {
+    background-color: rgb(234, 234, 234);
+    height: calc(100vh - 80px);
+}
+
+.container_criarfoto {
+    width: 700px;
+    border: 1px solid rgb(216, 216, 216);
+    margin: 0px auto;
+    height: 500px;
     display: flex;
 }
+
+
+/* TAG IFRMAE */
+
+.tags_iframe {
+    width: 300px;
+}
+
 
 .form_tags {
     display: block;
 }
 
-.search_icon{
-    width: 15px;
-    height: 15px;
-}
 
-.search_bar {
-    height: 20px;
-    width: 900px;
-}
 
-a {
-    text-decoration: none;
-}
 
-/* .container{
-    display: flex;
-} */
 
-main {
-    display: flex;
-}
 
-.image {
-    width: 300px;
-    height: auto;
-}
 
-.container {
-    height: 400px;
-}
-
-.desablitado {
-    display: none;
-}
-
-.main_image {
-    width: 30vw
-}

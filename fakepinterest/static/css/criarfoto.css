@@ -1,0 +1,50 @@
+body {
+    background-color: rgb(234, 234, 234);
+}
+
+main{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container_criarfoto {
+    width: 800px;
+    height: 580px;
+    background-color: white;
+    margin-top: 10px;
+    border-radius: 15px;    
+}
+
+.form_criarfoto {
+    width: 90%;
+    height: 500px;
+    display: flex;
+    border: 1px solid gray;
+    margin: 20px auto;
+}
+
+.form_arquivo {
+    height: 100%;
+    background-color: gray;
+
+}
+
+.preencher {
+    display: flex;
+    flex-direction: column;
+    margin: auto auto;
+    width: 50%;
+}
+.preencher * {
+    margin-top: 20px;
+}
+
+.preencher > iframe {
+    border: none;
+}
+
+.box {
+    border: none;
+    outline: none;
+}

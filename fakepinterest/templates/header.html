@@ -1,0 +1,19 @@
+<link rel='stylesheet' type='text/css' href='{{ url_for("static", filename="css/header.css") }}'>
+
+<header>
+    <img class="logo_header logo" src="{{ url_for('static', filename='fotos_site/logo_pinterest.png') }}">
+    <a href="{{ url_for('feed') }}"><p>Página inicial</p></a>
+    <a href="{{ url_for('criar_post') }}"><p>Criar</p></a>
+
+    {% block searchbar %}
+    <form action="#" class="search" method="POST">
+        <input class="search_bar" type="text"  name="search" placeholder="Pesquisar">
+        <img class='search_icon' src='{{ url_for("static", filename="fotos_site/search_icon.png") }}'>
+    </form>
+    {% endblock %}
+
+    <a class="icone_perfil" href="{{ url_for('perfil', username=usuario.username) }}">
+        <p > {{ usuario.username[0].upper() }}</p>
+    </a>
+    <a href="{{ url_for('logout') }}"><p>sair</p></a>
+</header>

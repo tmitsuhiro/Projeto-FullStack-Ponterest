@@ -2,10 +2,11 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, FileField, TextAreaField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError
 from fakepinterest.models import Usuario
+from fakepinterest import bcrypt
 
 
 class FormLogin(FlaskForm):
-    email = StringField('E-mail', validators=[DataRequired(), Email()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
     senha = PasswordField('Senha', validators=[DataRequired()])
     botao_confirmacao = SubmitField('Entrar')
 
@@ -13,6 +14,13 @@ class FormLogin(FlaskForm):
         usuario = Usuario.query.filter_by(email=email.data).first()
         if not usuario:
             raise ValidationError('Usuário inexistente, cria uma conta')
+            
+    
+    # def validate_senha(self, senha, email):
+    #     usuario = Usuario.query.filter_by(email=email.data).first()
+    #     senha_valida = bcrypt.check_password_hash(usuario.senha, senha.data)
+    #     if not senha_valida:
+    #         raise ValidationError('Senha inválida')
 
 
 class FormCriarConta(FlaskForm):

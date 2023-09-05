@@ -12,54 +12,40 @@
     <body>
         
         <div class="container">
-            <header>
-                <a href="{{ url_for('feed') }}"><h1>Página inicial</h1></a>
-                <a href="{{ url_for('criar_post') }}"><h1>Criar</h1></a>
-                {% block searchbar %}
-                <form action="#" class="search" method="POST">
-                    <img class='search_icon' src='{{ url_for("static", filename="fotos_site/search_icon.png") }}'>
-                    <input type="text" class="search_bar"  name="search" placeholder="pesquisar">
-                </form>
-                {% endblock %}
-                <a href="{{ url_for('perfil', username=usuario.username) }}">
-                    <div class='avatar_icon'>
-                        <p> {{ usuario.username }}</p>
+
+            {% include'header.html' %}
+            
+            
+            {% block main %}<main class="feed">
+
+                <div class="fotos_container">
+
+                    {% for foto in fotos %}
+                    <div class="box">
+                        <a href="{{ url_for('post', id_foto=foto.id) }}">
+                            <img class="foto" src="{{ url_for('static', filename='fotos_posts/{}'.format(foto.imagem)) }}"/>
+                        </a>
                     </div>
-                </a>
-                <a href="{{ url_for('logout') }}">sair</a>
-            </header>
-            
-            {% block main %}
-            <main>
-                {% for foto in fotos %}
-                <div class="post">
-                    <a href="{{ url_for('post', id_foto=foto.id) }}">
-                        <img class="image" src="{{ url_for('static', filename='fotos_posts/{}'.format(foto.imagem)) }}"/>
-                    </a>
+                    {% endfor %}
                 </div>
-                {% endfor %}
+                
+            </main>{% endblock %}
             
-            </main>
-            {% endblock %}
         </div>
 
 
         <script>
-            let botao_criar_pasta = document.querySelector(".botao_criar_pasta")
-            let pagina = document.querySelector(".container")
-            let janela_criar_pasta = document.querySelector(".form_login")
-        
-            botao_login.onclick = function(){
-                    form_login.classList.toggle("aberto")
-                    pagina.classList.toggle("inativo")
-                    }
-        
+            let search_bar = document.querySelector(".search_bar")
+            let pagina = document.querySelector("body")
+            
             pagina.onclick = function(e){
-            if (!form_login.contains(e.target) && !botao_cadastrar.contains(e.target)) {
-            pagina.classList.remove("inativo");
-            form_login.classList.remove("aberto");
-            }i              
+                if (!search_bar.contains(e.target)) {
+                    if (search_bar.value !="") {
+                    search_bar.value = ""
+                    }
+                }
             }
+
         </script>
 
     </body>

@@ -4,6 +4,9 @@ from fakepinterest.models import Usuario, Foto, Tags, Pasta, SavePin
 from flask_login import login_required, login_user, logout_user, current_user
 from fakepinterest.forms import FormLogin, FormCriarConta, FormFoto
 from werkzeug.utils import secure_filename
+from sqlalchemy.sql.expression import func
+from random import shuffle
+from wtforms.validators import ValidationError
 import os
 
 
@@ -21,24 +24,48 @@ def get_foto(salvo):
 @app.route("/", methods=['GET', 'POST'])
 def homepage():
     form_login = FormLogin()
-    form_criarconta = FormCriarConta()
-
-    if form_login.validate_on_submit() and 'botao_confirmacao' in request.form:
+    form_cadastro = FormCriarConta()
+    if form_login.validate_on_submit() and 'botao_confirmacao' in request.form: 
         usuario = Usuario.query.filter_by(email=form_login.email.data).first()
         if usuario and bcrypt.check_password_hash(usuario.senha, form_login.senha.data):
             login_user(usuario)
-            return redirect(url_for('feed', id_usuario=usuario.id))
+            return redirect(url_for('feed', id_usuario=current_user.id))
         
-    if form_criarconta.validate_on_submit() and 'botao_confirmacao2' in request.form:
-        senha = bcrypt.generate_password_hash(form_criarconta.senha.data)
-        usuario = Usuario(username=form_criarconta.username.data, 
-                          senha=senha, email=form_criarconta.email.data)
+        elif usuario and not bcrypt.check_password_hash(usuario.senha, form_login.senha.data):
+            return render_template('homepage.html', form_login=form_login, form_cadastro=form_cadastro, erro="login", erro_senha="senha invalida")
+
+    if form_login.errors and 'botao_confirmacao' in request.form:
+        return render_template('homepage.html', form_login=form_login, form_cadastro=form_cadastro, erro="login")
+    
+    if form_cadastro.validate_on_submit() and 'botao_confirmacao2' in request.form:
+        senha = bcrypt.generate_password_hash(form_cadastro.senha.data)
+        usuario = Usuario(username=form_cadastro.username.data, 
+                          senha=senha, email=form_cadastro.email.data)
         database.session.add(usuario)
         database.session.commit()
         login_user(usuario, remember=True)
-        return redirect(url_for('feed', id_usuario=usuario.id))
+        return redirect(url_for('feed', id_usuario=current_user.id))
+
+    if form_cadastro.errors and 'botao_confirmacao' in request.form:
+        return render_template('homepage.html', form_login=form_login, form_cadastro=form_cadastro, erro="cadastro")
+
+    return render_template('homepage.html', form_login=form_login, form_cadastro=form_cadastro)
+
+
+
+@app.route("/cadastro", methods=['GET', 'POST'])
+def cadastro():
+    form_cadastro = FormCriarConta()
+    if form_cadastro.validate_on_submit() and 'botao_confirmacao2' in request.form:
+        senha = bcrypt.generate_password_hash(form_cadastro.senha.data)
+        usuario = Usuario(username=form_cadastro.username.data, 
+                          senha=senha, email=form_cadastro.email.data)
+        database.session.add(usuario)
+        database.session.commit()
+        login_user(usuario, remember=True)
+        return redirect(url_for('homepage'))
     
-    return render_template('homepage.html', form_login=form_login, form_criarconta=form_criarconta)
+    return render_template('cadastro.html', form_cadastro=form_cadastro)
 
 
 @app.route("/perfil/<username>", methods=["GET", "POST"])
@@ -84,7 +111,7 @@ def feed():
         pesquisa = request.form['search']
         return redirect(url_for("search", pesquisa=pesquisa, usuario=usuario))
     
-    fotos = Foto.query.order_by(Foto.data_criacao.desc()).all()
+    fotos = Foto.query.order_by(func.random()).all()
     return render_template("feed.html", fotos=fotos, usuario=usuario)
 
 
@@ -92,7 +119,7 @@ def feed():
 @login_required
 def search(pesquisa):
     usuario = current_user
-    fotos_pesquisa = Foto.query.filter(Foto.tags.like("%{}%".format(pesquisa))).all()
+    fotos_pesquisa = Foto.query.filter(Foto.tags.like("%{}%".format(pesquisa))).order_by(func.random()).all()
     return render_template("feed.html", fotos=fotos_pesquisa, usuario=usuario)
 
 
@@ -120,6 +147,7 @@ def post(id_foto):
             fotos_relacionados.append(i)
 
     fotos_relacionados = list(set(fotos_relacionados))
+    shuffle(fotos_relacionados)
 
     dono_post = Usuario.query.get(int(foto.id_usuario)) 
     if request.method == "POST" and "save_pasta" in request.form:

@@ -11,35 +11,39 @@
 </head>
 
 {% block body %}
-<body>    
+<body>   
+        {% if erro %}
+        <div class="janela_{{erro}} aberto janela">{% include '{}.html'.format(erro) %}</div>
+
+        {% else %}
+        <div class="janela_login janela">{% include 'login.html' %}</div>
+
+        <div class="janela_cadastro janela">{% include 'cadastro.html' %}</div>
+
+        {% endif %}
+
         
-        <div class="form_login form" >
-                {% include 'login.html' %}
-        </div>
-                
-        <div class="form_cadastrar form">
-                {% include 'criarconta.html' %}
-        </div>
+        
 
         <div class="container">
                 
                 <header>
-                        <img src="{{ url_for('static', filename='fotos_site/logo_pinterest.png') }}">
+                        <img class="logo_header logo" src="{{ url_for('static', filename='fotos_site/logo_pinterest.png') }}">
                         
                         <p> Ponterest</p>
 
 
-                        <div class="botoes">
+                        <div class="botoes_header">
                 
-                                <button class="botao_login" id="botao_login"> Entrar </button>
+                                <button class="botao_login_header"> Entrar </button>
                 
-                                <button class="botao_cadastrar"> Criar Conta </button>
+                                <button class="botao_cadastrar_header"> Criar Conta </button>
                         </div>
                 
                 </header>
                 <main>
                         <div class="apresentacao">
-
+                                
                         </div>
                 
                 </main>
@@ -47,33 +51,37 @@
 
 
         <script>
-                let botao_login = document.querySelector(".botao_login")
-                let botao_cadastrar = document.querySelector(".botao_cadastrar")
+                let botao_login = document.querySelector(".botao_login_header")
+                let botao_cadastrar = document.querySelector(".botao_cadastrar_header")
                 let pagina = document.querySelector(".container")
-                let form_login = document.querySelector(".form_login")
-                let form_cadastrar = document.querySelector(".form_cadastrar")
+                let janela_login = document.querySelector(".janela_login")
+                let janela_cadastro = document.querySelector(".janela_cadastro")
+
+                if(janela_login.classList.contains("aberto") || janela_cadastro.classList.contains("aberto")){
+                        pagina.classList.toggle("inativo")
+                        }
 
                 botao_login.onclick = function(){
-                        if(!form_cadastrar.classList.contains("aberto")){
-                        form_login.classList.toggle("aberto")
+                        if(!janela_cadastro.classList.contains("aberto")){
+                        janela_login.classList.toggle("aberto")
                         pagina.classList.toggle("inativo")
                         }
                 }
                 botao_cadastrar.onclick = function(){
-                        if(!form_login.classList.contains("aberto")){
-                        form_cadastrar.classList.toggle("aberto")
+                        if(!janela_login.classList.contains("aberto")){
+                        janela_cadastro.classList.toggle("aberto")
                         pagina.classList.toggle("inativo")
                         }
                 }
                 pagina.onclick = function(e){
-                if (form_login.classList.contains("aberto") && !botao_login.contains(e.target)
-                 && !form_login.contains(e.target) && !botao_cadastrar.contains(e.target)) {
+                if (janela_login.classList.contains("aberto") && !botao_login.contains(e.target)
+                 && !janela_login.contains(e.target) && !botao_cadastrar.contains(e.target)) {
                 pagina.classList.remove("inativo");
-                form_login.classList.remove("aberto");
-                }if (form_cadastrar.classList.contains("aberto") && !botao_cadastrar.contains(e.target)
-                 && !form_cadastrar.contains(e.target) && !botao_login.contains(e.target)) {
+                janela_login.classList.remove("aberto");
+                }if (janela_cadastro.classList.contains("aberto") && !botao_cadastrar.contains(e.target)
+                 && !janela_cadastro.contains(e.target) && !botao_login.contains(e.target)) {
                 pagina.classList.remove("inativo");
-                form_cadastrar.classList.remove("aberto");
+                janela_cadastro.classList.remove("aberto");
                 }                
                 }
         </script>
