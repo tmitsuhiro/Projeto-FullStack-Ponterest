@@ -12,8 +12,16 @@
 
 {% block body %}
 <body>   
-        {% if erro %}
+        {% if erro and erro == "login" %}
         <div class="janela_{{erro}} aberto janela">{% include '{}.html'.format(erro) %}</div>
+
+        <div class="janela_cadastro janela">{% include 'cadastro.html' %}</div>
+
+        {% elif erro and erro == "cadastro" %}
+
+        <div class="janela_{{erro}} aberto janela">{% include '{}.html'.format(erro) %}</div>
+
+        <div class="janela_login janela">{% include 'login.html' %}</div>
 
         {% else %}
         <div class="janela_login janela">{% include 'login.html' %}</div>

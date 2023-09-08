@@ -33,7 +33,8 @@
         </form>
 
         <!-- <iframe class="desabilitado janela_criar_pasta"></iframe> -->
-            
+        
+        <a href="{{ url_for('configuracao') }}">config</a>
 
         {% for foto in usuario.fotos %}
             <a href="{{ url_for('post', id_foto=foto.id) }}">
@@ -48,8 +49,8 @@
                 <p>{{ pasta.titulo }}</p>
             </a>
             {% for foto in pasta.fotos_salvas[:3] %}
-                <a href="{{ url_for('post', id_foto=foto.id) }}">
-                    <img class="foto" src="{{ url_for('static', filename='fotos_posts/{}'.format(foto.foto_imagem)) }}"/>
+                <a href="{{ url_for('post', id_foto=foto.foto_salva) }}">
+                    <img class="foto" src="{{ url_for('static', filename='fotos_posts/{}'.format(foto.foto.imagem)) }}"/>
                 </a>
             {% endfor %}
 

@@ -12,8 +12,15 @@
     </form>
     {% endblock %}
 
+    {% if current_user.foto_perfil != "vazio" %}
+    <a class="icone_perfil" href="{{ url_for('perfil', username=usuario.username) }}">
+        <img  src="{{ url_for('static', filename='fotos_perfil/{}'.format(current_user.foto_perfil)) }}"/>
+    </a>
+    {% else %}
     <a class="icone_perfil" href="{{ url_for('perfil', username=usuario.username) }}">
         <p > {{ usuario.username[0].upper() }}</p>
     </a>
+    {% endif %}
+
     <a href="{{ url_for('logout') }}"><p>sair</p></a>
 </header>

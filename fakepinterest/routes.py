@@ -1,12 +1,13 @@
 from flask import render_template, url_for, redirect, request
 from fakepinterest import app, database, bcrypt
-from fakepinterest.models import Usuario, Foto, Tags, Pasta, SavePin
+from fakepinterest.models import Usuario, Foto, Tags, Pasta, SalvarFoto
 from flask_login import login_required, login_user, logout_user, current_user
-from fakepinterest.forms import FormLogin, FormCriarConta, FormFoto
+from fakepinterest.forms import FormLogin, FormCriarConta, FormFoto, FormFotoPerfil
 from werkzeug.utils import secure_filename
 from sqlalchemy.sql.expression import func
 from random import shuffle
 from wtforms.validators import ValidationError
+from secrets import token_hex as th
 import os
 
 
@@ -52,22 +53,6 @@ def homepage():
     return render_template('homepage.html', form_login=form_login, form_cadastro=form_cadastro)
 
 
-
-@app.route("/cadastro", methods=['GET', 'POST'])
-def cadastro():
-    form_cadastro = FormCriarConta()
-    if form_cadastro.validate_on_submit() and 'botao_confirmacao2' in request.form:
-        senha = bcrypt.generate_password_hash(form_cadastro.senha.data)
-        usuario = Usuario(username=form_cadastro.username.data, 
-                          senha=senha, email=form_cadastro.email.data)
-        database.session.add(usuario)
-        database.session.commit()
-        login_user(usuario, remember=True)
-        return redirect(url_for('homepage'))
-    
-    return render_template('cadastro.html', form_cadastro=form_cadastro)
-
-
 @app.route("/perfil/<username>", methods=["GET", "POST"])
 @login_required
 def perfil(username):
@@ -95,8 +80,9 @@ def perfil(username):
 @login_required
 def pasta(username, nome_pasta):
     if username == current_user.username:
-        fotos_salvas = Pasta.query.filter(Pasta.titulo==nome_pasta, Pasta.id_usuario==current_user.id).first().fotos_salvas
-        fotos = list(map(get_foto, fotos_salvas))
+        pasta = Pasta.query.filter(Pasta.titulo==nome_pasta, Pasta.id_usuario==current_user.id).first()
+        fotos_salvas = pasta.fotos_salvas
+        fotos = fotos_salvas.foto_salva
         return render_template("pasta.html", usuario=current_user, fotos=fotos)
     else:
         return render_template("pasta.html", usuario=current_user, fotos=fotos)
@@ -149,14 +135,14 @@ def post(id_foto):
     fotos_relacionados = list(set(fotos_relacionados))
     shuffle(fotos_relacionados)
 
-    dono_post = Usuario.query.get(int(foto.id_usuario)) 
+    dono_post = foto.usuario 
     if request.method == "POST" and "save_pasta" in request.form:
         nome_pasta = request.form['save_pasta']
         pasta = Pasta.query.filter(Pasta.titulo==nome_pasta, Pasta.id_usuario==current_user.id).first()
-        savepin = SavePin(id_usuario=current_user.id, foto_imagem=foto.imagem, pasta_salva=pasta.id)
-        database.session.add(savepin)
+        salvarfoto = SalvarFoto(id_usuario=current_user.id, foto_salva=foto.id, pasta_salva=pasta.id)
+        database.session.add(salvarfoto)
         database.session.commit()
-    salvo = SavePin.query.filter(SavePin.id_usuario==current_user.id, SavePin.foto_imagem==foto.imagem).first()
+    salvo = SalvarFoto.query.filter(SalvarFoto.id_usuario==current_user.id, SalvarFoto.foto_salva==foto.id).first()
     return render_template("post.html", usuario=usuario, foto=foto, dono_post=dono_post, fotos_relacionados=fotos_relacionados, salvo=salvo)
 
 
@@ -171,8 +157,8 @@ def criar_post():
     form_foto = FormFoto()
     if form_foto.validate_on_submit():
         arquivo = form_foto.foto.data
-        nome_seguro = secure_filename(arquivo.filename)
-        # salvar o arquivo dentro da pasta certa
+        extensao_arquivo = os.path.splitext(arquivo.filename)[1]
+        nome_seguro = secure_filename(th(10)+extensao_arquivo)
         caminho = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                                 app.config["UPLOAD_FOLDER"],
                                 nome_seguro)
@@ -180,14 +166,46 @@ def criar_post():
         tags = tag_usuario.tags
         titulo = form_foto.titulo.data
         descricao = form_foto.descricao.data
-        # criar a foto no banco com o item "imagem" sendo o nome do arqivo
         foto = Foto(imagem=nome_seguro, id_usuario=current_user.id, tags=tags, titulo=titulo, descricao=descricao)
         database.session.add(foto)
         database.session.commit()
         reset_tag(current_user.id)
+        if request.form["pasta"] != "nenhum":
+            nome_pasta = request.form["pasta"]
+            pasta = Pasta.query.filter(Pasta.titulo==nome_pasta, Pasta.id_usuario==current_user.id).first()
+            salvarfoto = SalvarFoto(id_usuario=current_user.id, foto_salva=foto.id, pasta_salva=pasta.id)
+            database.session.add(salvarfoto)
+            database.session.commit()
         return redirect(url_for('perfil',  username=current_user.username))
     return render_template("criarpost.html", usuario=current_user, form=form_foto, tag_list=None, tag_usuario=tag_usuario)
 
+
+@app.route("/configuracao", methods=["POST", "GET"])
+@login_required
+def configuracao():
+    form_foto_perfil = FormFotoPerfil()
+    nome_pasta = "fotos_perfil"
+    if form_foto_perfil.validate_on_submit():
+        arquivo = form_foto_perfil.foto.data
+        print(arquivo.filename)
+        extensao_arquivo = os.path.splitext(arquivo.filename)[1]
+        nome_seguro = secure_filename(th(10)+extensao_arquivo)
+        caminho = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                                app.static_folder, nome_pasta,
+                                nome_seguro)
+        print(caminho)
+        arquivo.save(caminho)
+        current_user.foto_perfil = nome_seguro
+        database.session.commit()
+        return render_template("configuracao.html", usuario=current_user, form=form_foto_perfil)
+
+    # if request.method == "POST" and "mudar_nome_usuario" in request.form:
+    #     novo_nome = request.form['mudar_nome_usuario']
+    #     current_user.username = novo_nome
+    #     database.session.commit()
+    #     return render_template("configuracao.html", usuario=current_user, form=form_foto_perfil)
+
+    return render_template("configuracao.html", usuario=current_user, form=form_foto_perfil)
 
 @app.route("/logout")
 @login_required
@@ -220,6 +238,6 @@ def tag_manager():
         return render_template("tag_manager.html", usuario=current_user, tag_list=tag_list)
     return render_template("tag_manager.html", usuario=current_user)
 
-@app.route("/teste")
+@app.route("/teste", methods=["post", "get"])
 def teste():
-    pass
+    return render_template('teste.html')

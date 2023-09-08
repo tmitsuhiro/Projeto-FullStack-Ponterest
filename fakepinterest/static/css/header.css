@@ -3,7 +3,6 @@
     padding: 0;
     box-sizing: border-box; /* Isso ajuda a evitar problemas de dimensionamento */
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Helvetica, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", メイリオ, Meiryo, "ＭＳ Ｐゴシック", Arial, sans-serif;
-
   }
 
 header {
@@ -24,6 +23,7 @@ header > * {
 
 .logo_header {
     width: 28px;
+    margin-right: 0px;
 }
 
     /* SEARCH BAR  */
@@ -80,10 +80,20 @@ header > * {
 
     .icone_perfil {
         background-color: rgb(234, 234, 234);
-        width: 30px;
-        height: 30px;
-        border-radius: 15px;
-        text-align: center;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .icone_perfil > img{
+        width: 100%;
+        height: 100%;
+        object-fit:cover; 
     }
 
 
@@ -91,3 +101,4 @@ header > * {
 a {
     text-decoration: none;
 }
+

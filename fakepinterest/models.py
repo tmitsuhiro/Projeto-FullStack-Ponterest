@@ -12,8 +12,9 @@ class Usuario(db.Model, UserMixin):
     username = db.Column(db.String, nullable=False, unique=True)
     email = db.Column(db.String, nullable=False, unique=True)
     senha = db.Column(db.String, nullable=False)
+    foto_perfil = db.Column(db.String, default="vazio")
     fotos = db.relationship("Foto", backref="usuario", lazy=True)
-    salvos = db.relationship("SavePin", backref="usuario", lazy=True)
+    salvos = db.relationship("SalvarFoto", backref="usuario", lazy=True)
     pastas = db.relationship("Pasta", backref="usuario", lazy=True)
   
 
@@ -25,6 +26,7 @@ class Foto(db.Model):
     titulo = db.Column(db.String)
     descricao = db.Column(db.Text)
     tags = db.Column(db.String)
+    salvos = db.relationship("SalvarFoto", backref="foto", lazy=True)
 
 
 class Tags(db.Model):
@@ -33,10 +35,10 @@ class Tags(db.Model):
     tags = db.Column(db.String, default='')
 
 
-class SavePin(db.Model):
+class SalvarFoto(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     id_usuario = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
-    foto_imagem = db.Column(db.String , nullable=False)
+    foto_salva = db.Column(db.Integer, db.ForeignKey('foto.id'), nullable=False)
     pasta_salva = db.Column(db.Integer, db.ForeignKey('pasta.id'))
 
 
@@ -44,6 +46,6 @@ class Pasta(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     id_usuario = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
     titulo = db.Column(db.String)
-    fotos_salvas = db.relationship("SavePin", backref="pasta", lazy=True )
+    fotos_salvas = db.relationship("SalvarFoto", backref="pasta", lazy=True )
 
 

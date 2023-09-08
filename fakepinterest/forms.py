@@ -42,11 +42,16 @@ class FormCriarConta(FlaskForm):
 
 
 class FormFoto(FlaskForm):
-    foto = FileField("Foto", validators=[DataRequired()])
+    foto = FileField("Clique para carregar uma foto", validators=[DataRequired()])
     titulo = StringField("Título")
     descricao = TextAreaField("Descrição")
     tags = StringField('Tags')
-    botao_confirmacao = SubmitField("Enviar")
+    botao_confirmacao = SubmitField("Publicar")
+
+
+class FormFotoPerfil(FlaskForm):
+    foto = FileField( validators=[DataRequired()])
+    botao_confirmacao = SubmitField("salvar")
 
 
 

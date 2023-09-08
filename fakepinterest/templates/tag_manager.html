@@ -1,18 +1,64 @@
+<style>
+    
+.input_tag{
+    border: 2px solid rgb(139, 139, 139);
+    outline: none;
+    border-radius: 15px;
+    height: 40px;
+    width: 70%;
+}
+
+.tag {
+    background-color: rgb(221, 221, 221);
+    width: auto;
+    border-radius: 15px;
+    margin-right: 15px;
+    height: 30px;
+
+}
+
+.lista_tags{
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.botao_deletar{
+    border: none;
+    font-weight: 700;
+    background-color: transparent;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.tag > p {
+    margin: auto 10px;
+}
+
+</style>
+
+
+
+
 <form action="#" method="post" class="form_tags">
-    <label for="tag">Tags</label>
-    <input type="text" id="tag" name="tag" placeholder="adicione uma tag">
+    
+    <input class="input_tag box" type="text" id="tag" name="tag" placeholder="Adicione tags para a foto">
 
      {% if tag_list %}
-        {% for tag in tag_list[1:] %}
-            <div class="tag" style="display: flex;">
-                <p> {{ tag }} </p>
-                <form method="post">
-                    <input type="text" name="delete" value="{{ tag }}" style="display: none;">
-                    <input type="submit" value="x">
-                </form>
-            </div>
-        {% endfor %}
+        <div class="lista_tags">
+            {% for tag in tag_list[1:] %}
+                <div class="tag" style="display: flex;">
+                    <p> {{ tag }} </p>
+                    <form method="post">
+                        <input type="text" name="delete" value="{{ tag }}" style="display: none;">
+                        <input class="botao_deletar" type="submit" value="x">
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
     {% endif %}
+    
 </form>
 <!-- 
 <p>{{ request.form }}</p> -->

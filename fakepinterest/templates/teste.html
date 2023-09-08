@@ -7,33 +7,31 @@
 </head>
 <body>
     <style>
-        p {
-            color: blue;
-            font-size: 40px;
-        }
-
-        .container {
-            display: block;
-            background-color: gray;
-            height: 40px;
-            width: 40px;
-        }
-
-        .palavra {
-            display: none;
-        }
-
+        
     </style>
 
     
 
 
 
-    <div class="container">
-        <p class="palavra"> oi</p>
-    </div>
+    <form name="select1" action="" method="post">
+        <select name="select2">
+            <option>nenhum</p></option>
+            <option value="1">item1</option>
+            <option value="2">item2 </option>
+            <option value="3">item3 </option>
+            <option value="4">item4 </option>
+        </select>
+
+        <input type="text" name="texto">
+        <input type="submit" value="enviar">
+    </form>
+
+    {{request.form }}
+
+
+
     
-    <button>botao</button>
 
     <script>
 

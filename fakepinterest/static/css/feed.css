@@ -15,8 +15,8 @@
 .fotos_container {
     width: 1250px;
     margin: 20px auto;
-    columns: 4;
-    column-gap: 15px;
+    columns: 5;
+    column-gap: 18px;
 
 }
 

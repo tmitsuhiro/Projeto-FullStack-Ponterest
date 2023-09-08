@@ -1,8 +1,6 @@
+import os
+arquivo = "oio.txt"
 
-from random import shuffle
+a = os.path.splitext(arquivo)[1]
 
-lista1 = ['oi', 'ou', 'ai', 'ae', 'gf', 'one', 'pice']
-
-shuffle(lista1)
-
-print(lista1)
+print(a)

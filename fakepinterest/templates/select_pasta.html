@@ -1,0 +1,124 @@
+<style>
+    .main {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgb(255, 210, 125);
+    }
+
+    .janela_pasta {
+        background-color: rgb(255, 255, 255);
+        width: 360px;
+        height: 490px;
+        border-radius: 18px;
+        font-size: 20px;
+        font-weight: 500;
+    }
+
+    .janela_pasta > p {
+        margin: 10px auto;
+        width: 40px;
+
+    }
+    
+    form.escolher_pasta {
+        height: 350px;
+        overflow: scroll;
+    }
+
+    .escolher_pasta {
+        height: 400px;
+        width: 100%;
+    }
+
+    .pasta {
+        display: flex;
+        margin: 10px 10px;
+        align-items: center;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    .pasta * {
+
+    margin: 10px;
+    }
+    .pasta:hover {
+        background-color: rgb(212, 212, 212);
+    }
+    
+
+    .pasta > img {
+        height: 40px;
+        width: 40px;
+        object-fit: cover;
+        background-color: blue;
+        border-radius: 10px;
+    }
+
+
+    .botao_salvar {
+        border-radius: 30px;
+        background-color: red;
+        border: none;
+        color: white;
+        width: 70px;
+        margin-left: auto;
+        font-weight: 600;
+        padding: 10px 10px;
+        text-align: center;
+        cursor: pointer;
+        display: none;
+    }
+    .criar_pasta {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .botao_criarpasta {
+        width: 60px;
+        height: 40px;
+
+    }
+
+    .pasta:hover > .botao_salvar {
+        display: block;
+        
+    }
+
+    .input_salvar {
+        display: none;
+    }
+    
+</style>
+
+
+<div class="main">
+    <div class="janela_pasta">
+
+        <p>Pastas</p>
+
+        <form class="escolher_pasta" method="get">
+
+                <label for="pasta_1">
+                    <div class="pasta">
+                        <img src="">
+                         <p class="nome_pasta"> Pasta 1</p>
+                         <button class="botao_salvar">Salvar</button>
+                         <input class="input_salvar" type="submit" name="salvar" value="pasta1" id="pasta_1">
+                    </div>
+                </label>
+        
+                
+            
+        </form>
+        <div class="criar_pasta">
+            <p>Criar pasta</p>
+            <button class="botao_criarpasta">+</button>
+        </div>
+                
+    </div>
+</div>

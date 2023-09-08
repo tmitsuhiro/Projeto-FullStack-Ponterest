@@ -11,38 +11,87 @@
 
         <main>
             <div class="container_criarfoto">
-
-                <div class="escolher_pasta"></div>
+                
             
                 <form class="form_criarfoto" method="POST" enctype="multipart/form-data">
                     {{ form.csrf_token }}
 
-                    {{ form.foto(class="form_arquivo") }}
+                    
+                    <label class="label_inputfoto" for="input_foto"><p>Clique e carregue uma imagem</p></label>
+                    <div class="box_imagem">
+                        <img class="imagem_foto" src="">
+                        <div class="botao_excluir"><P>&times;</P></div>
+                    </div>
 
                     <div class="preencher">
+
+                        <div class="pasta">
+                            <p>Pasta:</p>
+                            <select name="pasta" class="escolher_pasta">
+                                <option value="nenhum">Nenhum</option>
+                            {% for pasta in usuario.pastas %}
+                                <option  value="{{pasta.titulo}}">{{pasta.titulo}}</option>  
+                            {% endfor %}
+                            </select>
+                        </div>
                         
 
-                        {{  form.titulo(class="box_titulo box", placeholder="Adicione um título") }}
+                        {{ form.foto(class="input_foto", id="input_foto") }}
+
+                        <div class="escolher_pasta"></div>
+                        
+                        {{  form.titulo(class="input_titulo input_texto", placeholder="Adicione um título") }}
 
                         <hr>
 
-                        {{ current_user.username }}
+                        <div class="usuario">
+                            <div class="icone_perfil_form">
+                                {% if current_user.foto_perfil != "vazio" %}
+                                    <img src="{{ url_for('static', filename='fotos_perfil/{}'.format(current_user.foto_perfil)) }}"/>
+                                {% else %}
+                                <p > {{ usuario.username[0].upper() }}</p>
+                                {% endif %}
+                            </div>
+                            {{ current_user.username }}
+                        </div>
 
-                        {{  form.descricao(class="box_descricao box", placeholder="Adicione uma descrição") }}
+                        {{  form.descricao(class="input_descricao input_texto", placeholder="Adicione uma descrição") }}
                         <hr>
                         
                         <iframe class="tags_iframe" src="{{ url_for('tag_manager')}}" ></iframe>
                         {{ form.botao_confirmacao(class="botao_criarfoto") }}
                     </div>
-            
+                    
                 </form>
-
-                
-
-                <p>{{ tag_usuario.tags }}</p>
             
             </div>
         </main>
-        
+
+
+
+        <script>
+            const image = document.querySelector(".imagem_foto"),
+            box = document.querySelector(".box_imagem"),
+            input = document.querySelector(".input_foto"),
+            label = document.querySelector(".label_inputfoto"),
+            botao = document.querySelector(".botao_excluir");
+
+            input.addEventListener("change", () => {
+                image.src = URL.createObjectURL(input.files[0]);
+                label.classList.toggle("inativo");
+                box.classList.toggle("ativo")
+                botao.classList.toggle("ativo")
+            })
+            
+            botao.onclick = function() {
+                image.src = "";
+                label.classList.remove("inativo");
+                box.classList.remove("ativo")
+                botao.classList.remove("ativo")
+            }
+
+
+        </script>
+
     </body>
 </html>

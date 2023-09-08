@@ -1,5 +1,15 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Isso ajuda a evitar problemas de dimensionamento */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Helvetica, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", メイリオ, Meiryo, "ＭＳ Ｐゴシック", Arial, sans-serif;
+  }
+
+
 body {
     background-color: rgb(234, 234, 234);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Helvetica, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", メイリオ, Meiryo, "ＭＳ Ｐゴシック", Arial, sans-serif;;
+
 }
 
 main{
@@ -13,38 +23,208 @@ main{
     height: 580px;
     background-color: white;
     margin-top: 10px;
-    border-radius: 15px;    
+    border-radius: 15px;  
+    position: relative;
 }
 
 .form_criarfoto {
-    width: 90%;
-    height: 500px;
-    display: flex;
-    border: 1px solid gray;
-    margin: 20px auto;
-}
-
-.form_arquivo {
+    display: grid;  
+    grid-template-columns: 1fr 450px;
+    grid-gap: 30px;
+    max-width: 800px;
+    padding:40px;
     height: 100%;
-    background-color: gray;
 
 }
+
+/* INPUT FOTO */
+
+    .input_foto {
+        width:1px;
+        height: 1px;
+        position: absolute;
+        top: 50%;
+        left: 20%;
+    }    
+
+    .label_inputfoto {
+        background-color: rgb(234, 234, 234);
+        border-radius: 15px;  
+        cursor: pointer;
+        text-align: center;
+    }
+    .label_inputfoto > p{
+        background-color: rgb(234, 234, 234);
+        font-size: 14px;
+        font-weight: 500;
+        color: rgb(34, 34, 34);
+        border-radius: 15px;
+        border: 2px dashed rgb(168, 168, 168);
+        height: calc(100% - 40px);
+        margin: 20px;
+        padding-top: 50%;
+    }
+
+    .imagem_foto {
+        width: 100%;
+        height: auto;
+        border-radius: 15px;
+        object-fit: contain;
+        border: 10px  solid rgb(234, 234, 234); 
+    }
+
+    .box_imagem{
+        display: none;
+        position: relative;
+    }
+
+    .botao_excluir {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background-color: rgb(206, 206, 206);
+        border-radius: 50%;
+        font-size: 30px;
+        font-weight: 800;
+        cursor: pointer;
+        height: 30px;
+        width: 30px;
+    }
+
+        .botao_excluir p {
+            margin-top: -8px;
+            margin-left: 5px;
+            
+        }
+
+
 
 .preencher {
-    display: flex;
-    flex-direction: column;
-    margin: auto auto;
-    width: 50%;
+    padding: 0 20px;
+    position: relative;
 }
-.preencher * {
+.preencher *{
+    display: block;
     margin-top: 20px;
+    border: 1px black;
 }
 
 .preencher > iframe {
     border: none;
+    margin-top: 0px;
 }
 
-.box {
-    border: none;
+.pasta {
+    width: max-content;
+    background-color: #eaeaea;
+    margin-top: 0px;
+    border-radius: 20px;
+    justify-self: center;
+    margin-right: 0px;
+    margin-left: auto;;
+}
+
+.pasta * {
+    margin-top: 0px;
+    margin: 10px 10px;
+    background-color: #eaeaea;
     outline: none;
+    font-size: 20px;
+    display: inline-block;
+}
+
+.pasta > select {
+    cursor: pointer;
+}
+
+    
+.box {
+    outline: none;
+}
+
+.botao_criarfoto {
+border: none;
+  border-radius: 20px;
+  background-color: #8404e4;
+  color: white;
+  width: 70%;
+  height: 40px;
+  font-size: 18px;
+  font-weight: 500;
+  margin: auto auto;
+  cursor: pointer;
+}
+
+.inativo {
+    display: none;
+}
+
+.ativo {
+    display: inline-block;
+}
+
+
+.input_texto{
+    outline: none;
+    border-bottom: 1px black solid;
+    width: 100%;
+}
+
+.input_texto:focus {
+    border-bottom: 3px solid rgb(95, 182, 249);
+    outline: none;
+}
+
+.input_descricao{
+    resize: none;
+    width: 100%;
+    height: 40px;
+    margin-top: 30px;
+}
+
+.input_descricao::placeholder{
+    font-size: 20px;
+}
+
+.input_titulo {
+    height: 70px;
+}
+
+.input_titulo[type="text"] {
+    font-size:37px;
+    padding-left: 10px;
+    font-weight: 700;
+}
+
+.input_descricao:focus {
+    height: 80px;
+}
+
+.usuario {
+    display: flex;
+    align-items: center;
+
+}
+
+.icone_perfil_form {
+    background-color: rgb(234, 234, 234);
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto 10px;
+    overflow: hidden;
+}
+
+.icone_perfil_form > p, img {
+    margin: auto;
+}
+.icone_perfil_form > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    margin-top: 0px;
 }
