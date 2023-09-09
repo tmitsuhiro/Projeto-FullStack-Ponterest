@@ -6,6 +6,7 @@
         <title>Ponterest - Feed</title>
         {% block link %}
             <link rel='stylesheet' type='text/css' href='{{ url_for("static", filename="css/feed.css") }}'>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         {% endblock %}
     </head>
 
@@ -15,16 +16,22 @@
 
             {% include'header.html' %}
             
-            
             {% block main %}<main class="feed">
-
                 <div class="fotos_container">
 
                     {% for foto in fotos %}
                     <div class="box">
-                        <a href="{{ url_for('post', id_foto=foto.id) }}">
-                            <img class="foto" src="{{ url_for('static', filename='fotos_posts/{}'.format(foto.imagem)) }}"/>
-                        </a>
+                        <div class="foto_box">
+                            <div class="pasta_bar">
+                                <button class="botao_escolher_pasta" value="Meus pins">Meus pins</button>
+                                <i class="fa-sharp fa-solid fa-angle-down fa-1x seta"></i>
+                                <button class="botao_salvar" value="Salvar">Salvar</button>
+                            </div>
+                            <a href="{{ url_for('post', id_foto=foto.id) }}">
+                                <img class="foto" src="{{ url_for('static', filename='fotos_posts/{}'.format(foto.imagem)) }}"/>
+                            </a>
+                        </div>
+                        <div class="usuario">usuario</div>
                     </div>
                     {% endfor %}
                 </div>
@@ -33,7 +40,7 @@
             
         </div>
 
-
+        {% block script %}
         <script>
             let search_bar = document.querySelector(".search_bar")
             let pagina = document.querySelector("body")
@@ -47,6 +54,7 @@
             }
 
         </script>
+        {% endblock %}
 
     </body>
 

@@ -1,3 +1,9 @@
+:root {
+    --main-purple: #8404e4;
+    --main-gray: rgb(234, 234, 234);
+}
+
+
 * {
     margin: 0;
     padding: 0;
@@ -7,60 +13,81 @@
   }
 
 
-
-
-
-/* MAIN FEED */
-
 .fotos_container {
     width: 1250px;
     margin: 20px auto;
     columns: 5;
     column-gap: 18px;
-
+ 
 }
 
-.fotos_container .box{
+.box{
     width: 100%;
     margin-bottom: 30px;
     break-inside: avoid;
+    position: relative;
 
 }
 
-.fotos_container .box img{
-    border-radius: 20px;
+.pasta_bar{
+    position: absolute;
+    top: 10px;
     width: 100%;
-    
+    align-items: center;
+    display: none;
+    z-index: 999;
+}
+
+.pasta_bar .botao_escolher_pasta {
+    background-color: transparent;
+    border: none;
+    font-size: 20px;
+    font-weight: 500;
+    color: white;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.pasta_bar .botao_salvar {
+    margin-left: auto;
+    margin-right: 10px;
+    background-color: var(--main-purple);
+    border-radius: 20px;
+    font-size: 15px;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    cursor: pointer;
+
+}
+
+.seta {
+    filter: brightness(0) invert(1);
+    margin-left: 6px;
+    padding-top: 8px;
+    cursor: pointer;
+}
+
+.box a{ 
+    cursor: pointer;
+    overflow: hidden;
+}
+
+a > .foto {
+    width: 100%;
+    object-fit: contain;
+    border-radius: 20px;
 }
 
 
-/* CRIAR FOTO */
 
-main.criarfoto {
-    background-color: rgb(234, 234, 234);
-    height: calc(100vh - 80px);
-}
-
-.container_criarfoto {
-    width: 700px;
-    border: 1px solid rgb(216, 216, 216);
-    margin: 0px auto;
-    height: 500px;
+.box .foto_box:hover > .pasta_bar{
     display: flex;
 }
 
-
-/* TAG IFRMAE */
-
-.tags_iframe {
-    width: 300px;
+.box .foto_box:hover > a{
+    filter: brightness(55%);
 }
-
-
-.form_tags {
-    display: block;
-}
-
 
 
 

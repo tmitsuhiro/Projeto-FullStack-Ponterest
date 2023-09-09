@@ -56,36 +56,34 @@ def homepage():
 @app.route("/perfil/<username>", methods=["GET", "POST"])
 @login_required
 def perfil(username):
-    if username == current_user.username:
-        pastas = Pasta.query.filter(Pasta.id_usuario==current_user.id).all()
+    usuario_perfil = Usuario.query.filter(Usuario.username==username).first()
+    pastas_perfil = Pasta.query.filter(Pasta.id_usuario==current_user.id).all()
+    saves = SalvarFoto.query.filter(SalvarFoto.id_usuario==usuario_perfil.id).all()
+    fotos_salvas = [save.foto for save in saves]
 
-        if request.method == "POST" and "search" in request.form:
-            pesquisa = request.form['search']
-            return redirect(url_for('search_mypins', pesquisa=pesquisa))
-        
-        if request.method == "POST" and "nome_pasta" in request.form:
-            nome_pasta = request.form["nome_pasta"]
-            nova_pasta = Pasta(id_usuario=current_user.id, titulo=nome_pasta)
-            database.session.add(nova_pasta)
-            database.session.commit()
-        return render_template("perfil.html", usuario=current_user, usuario_visitado=None, pastas=pastas)
+    if request.method == "POST" and "search" in request.form:
+        pesquisa = request.form['search']
+        return redirect(url_for('search_mypins', pesquisa=pesquisa))
     
-    else:
-        usuario_visitado = Usuario.query.filter(Usuario.username==username).first()
-        pastas = Pasta.query.filter(Pasta.id_usuario==usuario_visitado.id).all()
-        return render_template("perfil.html", usuario=current_user, usuario_visitado=usuario_visitado, pastas=pastas)
+    if request.method == "POST" and "nome_pasta" in request.form:
+        nome_pasta = request.form["nome_pasta"]
+        nova_pasta = Pasta(id_usuario=current_user.id, titulo=nome_pasta)
+        database.session.add(nova_pasta)
+        database.session.commit()
+    return render_template("perfil.html", usuario=usuario_perfil, pastas=pastas_perfil, fotos_salvas=fotos_salvas)
 
 
 @app.route("/perfil/<username>/<nome_pasta>", methods=["GET", "POST"])
 @login_required
 def pasta(username, nome_pasta):
-    if username == current_user.username:
-        pasta = Pasta.query.filter(Pasta.titulo==nome_pasta, Pasta.id_usuario==current_user.id).first()
-        fotos_salvas = pasta.fotos_salvas
-        fotos = fotos_salvas.foto_salva
-        return render_template("pasta.html", usuario=current_user, fotos=fotos)
+    dono_pasta = Usuario.query.filter(Usuario.username==username).first()
+    pasta = Pasta.query.filter(Pasta.titulo==nome_pasta, Pasta.id_usuario==dono_pasta.id).first()
+    if nome_pasta == "salvos":
+        fotos = dono_pasta.fotos
     else:
-        return render_template("pasta.html", usuario=current_user, fotos=fotos)
+        fotos_salvas = SalvarFoto.query.filter(SalvarFoto.pasta_salva==pasta.id, SalvarFoto.id_usuario==dono_pasta.id).all()
+        fotos = [foto_salva.foto for foto_salva in fotos_salvas]
+    return render_template("pasta.html", usuario=current_user, fotos=fotos)
 
 
 

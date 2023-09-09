@@ -1,62 +1,89 @@
 {% extends "feed.html" %}
 
+{% block link %}
+    <link rel='stylesheet' type='text/css' href='{{ url_for("static", filename="css/perfil.css") }}'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+{% endblock %}
+
 {% block searchbar %}
     <form action="#" class="search" method="POST">
         <img class='search_icon' src='{{ url_for("static", filename="fotos_site/search_icon.png") }}'>
         <input type="text" class="search_bar"  name="search" placeholder="pesquise nas suas fotos">
     </form>
-
 {% endblock %}
 
 {% block main %}
 
-    {% if usuario_visitado %}
-
-        <p>Perfil do usuário: {{ usuario_visitado.username }}</p>
-
-        {% for foto in usuario_visitado.fotos %}
-            <img src="{{ url_for('static', filename='fotos_posts/{}'.format(foto.imagem)) }}"/>
-            <p>
-                {{ foto.tag}}
-            </p>
+        <div class="container_usuario">
+            <a class="icone_perfil2" href="{{ url_for('configuracao') }}">
+                <img  src="{{ url_for('static', filename='fotos_perfil/{}'.format(current_user.foto_perfil)) }}"/>
+            </a>
+            <p class="username">@{{ usuario.username }}</p>
+            {% if usuario.id == current_user.id %}
+            <a class="editar_perfil" href="{{ url_for('configuracao') }}"><p>Editar Perfil</p></a>
+            {% endif %}
             
-        {% endfor %}
-
-    {% else %}
-
-        <p>Perfil do usuário: {{ usuario.username }}</p>
+            <form class="janela_criar_pasta" method="post">
+                <input type="text" name="nome_pasta" placeholder="De um nome para a pasta">
+            </form>
+            
+            
+        </div>
+        
+        <input type="radio" id="criados" name="container" class="input_botao_criados">
+        <input type="radio" id="salvos" name="container" checked class="input_botao_salvos">
+        
+        <div class="botoes_container">
+            <label class="botao_criados" for="criados"><p class="c">Criados</p></label>
+            <label class="botao_salvos" for="salvos"><p class="s">Salvos</p></label>
+        </div>
+        
+        
+        <div class="container_criados" id="container_criados">
+            {% for foto in usuario.fotos %}
+            <div class="foto"><img src="{{ url_for('static', filename='fotos_posts/{}'.format(foto.imagem)) }}"/></div>
+            {% endfor %}
+        </div>
         
         <p class="botao_criar_pasta">+</p>
-
-        <form method="post">
-            <input type="text" name="nome_pasta" placeholder="De um nome para a pasta">
-        </form>
-
-        <!-- <iframe class="desabilitado janela_criar_pasta"></iframe> -->
-        
-        <a href="{{ url_for('configuracao') }}">config</a>
-
-        {% for foto in usuario.fotos %}
-            <a href="{{ url_for('post', id_foto=foto.id) }}">
-                <img class="foto" src="{{ url_for('static', filename='fotos_posts/{}'.format(foto.imagem)) }}"/>
+        <div class="container_pastas" id="container_salvos">
+            <a href="{{ url_for('pasta', username=usuario.username, nome_pasta='salvos') }}">
+                <div class="box_pasta minhas fotos">
+                    {% for foto in fotos_salvas[:3] %}
+                    <div class="foto"><img src="{{ url_for('static', filename='fotos_posts/{}'.format(foto.imagem)) }}"/></div>
+                    {% endfor %}
+                </div>
+                <p class="titulo_pasta">Salvos</p>
             </a>
-        
-        {% endfor %}
-
-        {% for pasta in usuario.pastas %}
-
-            <a href="{{ url_for('pasta', username=usuario.username, nome_pasta=pasta.titulo) }}">
-                <p>{{ pasta.titulo }}</p>
-            </a>
-            {% for foto in pasta.fotos_salvas[:3] %}
-                <a href="{{ url_for('post', id_foto=foto.foto_salva) }}">
-                    <img class="foto" src="{{ url_for('static', filename='fotos_posts/{}'.format(foto.foto.imagem)) }}"/>
+            {% for pasta in usuario.pastas %}
+                <a href="{{ url_for('pasta', username=usuario.username, nome_pasta=pasta.titulo) }}">
+                    <div class="box_pasta">
+                        {% for foto in pasta.fotos_salvas[:3] %}
+                        <div class="foto"><img src="{{ url_for('static', filename='fotos_posts/{}'.format(foto.foto.imagem)) }}"/></div>
+                        {% endfor %}
+                    </div>
+                    <p class="titulo_pasta">{{ pasta.titulo }}</p>
                 </a>
             {% endfor %}
+        </div>
 
-        {% endfor %}
-
-    {% endif %}
-<p>{{ request.form }}</p>
 {% endblock %}
+
+{% block script %}
+<script>
+    let search_bar = document.querySelector(".search_bar")
+    let pagina = document.querySelector("body")
+    let botao_criados = document.querySelector("#criados");
+    
+    pagina.onclick = function(e){
+        if (!search_bar.contains(e.target)) {
+            if (search_bar.value !="") {
+            search_bar.value = ""
+            }
+        }
+    };
+
+</script>
+{% endblock %}
+
 
