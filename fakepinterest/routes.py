@@ -28,7 +28,7 @@ def homepage():
     form_cadastro = FormCriarConta()
 
     qtd_usuarios = Usuario.query.filter(Usuario.id>2 ).count()
-    if qtd_usuarios > 1:
+    if qtd_usuarios > 5:
         usuario_deletado = Usuario.query.filter(Usuario.id>2).first()
         pastas = Pasta.query.filter(Pasta.id_usuario==usuario_deletado.id).all()
         fotos = Foto.query.filter(Foto.id_usuario==usuario_deletado.id).all()
@@ -97,14 +97,19 @@ def perfil(username):
     if request.method == "POST" and "nova_pasta" in request.form:
         qtd_pastas = Pasta.query.filter(Pasta.id_usuario==current_user.id).count()
         if qtd_pastas == 5:
-            flash("limite de pastas é 5")
+            flash("limite de pastas é 5!")
             return redirect(url_for('perfil', username=current_user.username))
         else:
             nome_pasta = request.form["nova_pasta"]
-            nova_pasta = Pasta(id_usuario=current_user.id, titulo=nome_pasta)
-            database.session.add(nova_pasta)
-            database.session.commit()
-            redirect(url_for('perfil', username=current_user.username))
+            pasta_existe = Pasta.query.filter(Pasta.titulo==nome_pasta, Pasta.id_usuario==current_user.id).first()
+            if pasta_existe:
+                flash("Já existe uma pasta com esse nome!")
+                return redirect(url_for('perfil', username=current_user.username))
+            else:
+                nova_pasta = Pasta(id_usuario=current_user.id, titulo=nome_pasta)
+                database.session.add(nova_pasta)
+                database.session.commit()
+                redirect(url_for('perfil', username=current_user.username))
     if form_foto_perfil.validate_on_submit():
         nome_pasta = "fotos_perfil"
         if current_user.foto_perfil != "vazio":
@@ -129,13 +134,14 @@ def perfil(username):
 @app.route("/perfil/<username>/<nome_pasta>", methods=["GET", "POST"])
 @login_required
 def pasta(username, nome_pasta):
+    print(nome_pasta)
     dono_pasta = Usuario.query.filter(Usuario.username==username).first()
-    pasta = Pasta.query.filter(Pasta.titulo==nome_pasta, Pasta.id_usuario==dono_pasta.id).first()
     if nome_pasta == "salvos":
         fotos_salvas = SalvarFoto.query.filter(SalvarFoto.id_usuario==dono_pasta.id).all()
         fotos = [foto_salva.foto for foto_salva in fotos_salvas]
         qtd_fotos = len(fotos)
     else:
+        pasta = Pasta.query.filter(Pasta.titulo==nome_pasta, Pasta.id_usuario==dono_pasta.id).first()
         fotos_salvas = SalvarFoto.query.filter(SalvarFoto.pasta_salva==pasta.id, SalvarFoto.id_usuario==dono_pasta.id).all()
         fotos = [foto_salva.foto for foto_salva in fotos_salvas]
         qtd_fotos = len(fotos)
@@ -266,7 +272,7 @@ def criar_post():
     form_foto = FormFoto()
     if form_foto.validate_on_submit():
         qtd_fotos = Foto.query.filter(Foto.id_usuario==current_user.id).count()
-        if qtd_fotos == 3:
+        if qtd_fotos == 15:
             flash('limite de fotos é 10')
             return redirect(url_for('criar_post'))
         arquivo = form_foto.foto.data

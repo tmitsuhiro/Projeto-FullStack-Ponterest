@@ -59,7 +59,7 @@
                         <div class="coluna_pasta">
                             {% if salvo %}
                                 {% if salvo.pasta_salva %}
-                                    <a href="{{ url_for('pasta', username=dono_post.username, nome_pasta='salvo.pasta.titulo') }}">
+                                    <a href="{{ url_for('pasta', username=dono_post.username, nome_pasta=salvo.pasta.titulo) }}">
                                         <p class="pasta_salva">{{ salvo.pasta.titulo }}</p>
                                     </a>
                                 {% else %}

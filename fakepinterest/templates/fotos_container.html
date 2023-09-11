@@ -1,11 +1,43 @@
 <style>
     .fotos_container {
-    width: 1250px;
+    width: calc(100% - 40px);
     margin: 20px auto;
-    columns: 5;
+    columns: 6;
     column-gap: 18px;
 }
 
+@media (max-width: 1200px){
+    .fotos_container{
+        width: calc(100% - 40px);
+        columns: 5;
+
+    }
+    
+}
+@media (max-width: 900px){
+    .fotos_container{
+        width: calc(100% - 40px);
+        columns: 4;
+
+    }
+    
+}
+@media (max-width: 700px){
+    .fotos_container{
+        width: calc(100% - 40px);
+        columns: 3;
+
+    }
+    
+}
+@media (max-width: 500px){
+    .fotos_container{
+        width: calc(100% - 40px);
+        columns: 2;
+
+    }
+    
+}
 .box{
     width: 100%;
     margin-bottom: 30px;
