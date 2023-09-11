@@ -19,6 +19,25 @@
         </form>
     </div>
 
+    <div class="janela_editar_foto">
+        <h2 class="titulo_editar_foto">Editar Foto</h2>
+        
+        <form  method="post">
+            <p>Título</p>
+            <div class="box_input">
+                <input class="input_titulo_foto" type="text" name="novo_titulo" value="{{foto.titulo}}">
+            </div>
+            <p>Descricao</p>
+            <div class="box_input">
+                <textarea class="input_descricao_foto"  name="nova_descricao">{{foto.descricao}}</textarea>
+            </div>
+            <div class="coluna_botao">
+                <button name="excluir_foto" class="botao_excluir_foto">Excluir Foto</button>
+                <button name="editar" class="salvar_alteracao">Salvar</button>
+            </div>
+        </form>
+    </div>
+
     {% include 'select_pasta.html' %}
 
     <div class="pagina">
@@ -31,31 +50,39 @@
         
                 <div class="sobre_foto">
                     <div class="pasta_bar">
-                        {% if salvo %}
-                            {% if salvo.pasta_salva %}
-                                <a href="{{ url_for('pasta', username=dono_post.username, nome_pasta='salvo.pasta.titulo') }}">
-                                    <p class="pasta_salva">{{ salvo.pasta.titulo }}</p>
-                                </a>
-                            {% else %}
-                                <a href="{{ url_for('pasta', username=dono_post.username, nome_pasta='salvos') }}"><p class="pasta_salva">meus pins</p></a>
-                            {% endif %}
-                            <form method="post">
-                                <button class="botao_salvo" name="excluir_pin">Salvo</button>
-                            </form>
-                        {% else%}
-                            <button class="botao_escolher_pasta">Meus pins <i class="fa-sharp fa-solid fa-angle-down fa-1x seta"></i></button>
-                            <form action="" method="post">
-                                <button class="botao_salvar2" name="salvar" value="meus_pins">Salvar</button>
-                            </form>
+                        {% if dono_post == current_user %}
+                        <button class="botao_editar_foto">Editar</button>
+                        {% else %}
+                        <div></div>
                         {% endif %}
+
+                        <div class="coluna_pasta">
+                            {% if salvo %}
+                                {% if salvo.pasta_salva %}
+                                    <a href="{{ url_for('pasta', username=dono_post.username, nome_pasta='salvo.pasta.titulo') }}">
+                                        <p class="pasta_salva">{{ salvo.pasta.titulo }}</p>
+                                    </a>
+                                {% else %}
+                                    <a href="{{ url_for('pasta', username=dono_post.username, nome_pasta='salvos') }}"><p class="pasta_salva">meus pins</p></a>
+                                {% endif %}
+                                <form method="post">
+                                    <button class="botao_salvo" name="excluir_pin">Salvo</button>
+                                </form>
+                            {% else%}
+                                <button class="botao_escolher_pasta">Meus pins <i class="fa-sharp fa-solid fa-angle-down fa-1x seta"></i></button>
+                                <form action="" method="post">
+                                    <button class="botao_salvar2" name="salvar" value="meus_pins">Salvar</button>
+                                </form>
+                            {% endif %}
+                        </div>
                     </div>
                     <h1 class="titulo_foto_main">{{ foto.titulo }}</h1>
                     <p class="descricao" style="white-space: pre;">{{ foto.descricao }}</p>
-                    <a class="usuario" href="{{ url_for('perfil', username=usuario.username) }}">
+                    <a class="usuario" href="{{ url_for('perfil', username=dono_post.username) }}">
                         {% if dono_post.foto_perfil != "vazio" %}
                             <img class="icone_perfil" src="{{ url_for('static', filename='fotos_perfil/{}'.format(dono_post.foto_perfil)) }}"/>
                         {% else %}
-                            <a class="icone_perfil" href="{{ url_for('perfil', username=usuario.username) }}"><p > {{ usuario.username[0].upper() }}</p></a>
+                            <p class="icone_perfil"> {{ dono_post.username[0].upper() }}</p>
                         {% endif %}
                         <p class="username">{{dono_post.username}}</p>
                     </a>

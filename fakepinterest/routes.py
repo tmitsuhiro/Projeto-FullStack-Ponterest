@@ -60,6 +60,7 @@ def perfil(username):
     pastas_perfil = Pasta.query.filter(Pasta.id_usuario==current_user.id).all()
     saves = SalvarFoto.query.filter(SalvarFoto.id_usuario==usuario_perfil.id).all()
     fotos_salvas = [save.foto for save in saves]
+    form_foto_perfil = FormFotoPerfil()
 
     if request.method == "POST" and "search" in request.form:
         pesquisa = request.form['search']
@@ -71,7 +72,27 @@ def perfil(username):
         database.session.add(nova_pasta)
         database.session.commit()
         redirect(url_for('perfil', username=current_user.username))
-    return render_template("perfil.html", usuario=usuario_perfil, pastas=pastas_perfil, fotos_salvas=fotos_salvas)
+    if form_foto_perfil.validate_on_submit():
+        nome_pasta = "fotos_perfil"
+        if current_user.foto_perfil != "vazio":
+            caminho_foto = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                                    app.static_folder, nome_pasta,
+                                    current_user.foto_perfil)
+            os.remove(caminho_foto)
+            
+        arquivo = form_foto_perfil.foto.data
+        print(arquivo.filename)
+        extensao_arquivo = os.path.splitext(arquivo.filename)[1]
+        nome_seguro = secure_filename(th(10)+extensao_arquivo)
+        caminho = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                                app.static_folder, nome_pasta,
+                                nome_seguro)
+        print(caminho)
+        arquivo.save(caminho)
+        current_user.foto_perfil = nome_seguro
+        database.session.commit()
+        redirect(url_for('perfil', username=current_user.username))
+    return render_template("perfil.html", usuario=usuario_perfil, pastas=pastas_perfil, fotos_salvas=fotos_salvas, form=form_foto_perfil)
 
 
 @app.route("/perfil/<username>/<nome_pasta>", methods=["GET", "POST"])
@@ -124,7 +145,7 @@ def feed():
 @login_required
 def search(pesquisa):
     usuario = current_user
-    fotos_pesquisa = Foto.query.filter(Foto.tags.like("%{}%".format(pesquisa))).order_by(func.random()).all()
+    fotos_pesquisa = Foto.query.filter(Foto.tags.like("%{}%".format(pesquisa)) | Foto.titulo.like("%{}%".format(pesquisa))).order_by(func.random()).all()
     return render_template("feed.html", fotos=fotos_pesquisa, usuario=usuario)
 
 
@@ -132,29 +153,36 @@ def search(pesquisa):
 @login_required
 def search_mypins(pesquisa):
     usuario = current_user
-    fotos_pesquisa = Foto.query.filter(Foto.tags.like("%{}%".format(pesquisa)), Foto.id_usuario==current_user.id).all()
+    fotos_pesquisa = Foto.query.filter(Foto.tags.like("%{}%".format(pesquisa)) | Foto.titulo.like("%{}%".format(pesquisa)), Foto.id_usuario==current_user.id).all()
     return render_template("feed.html", fotos=fotos_pesquisa, usuario=usuario)
 
 
 @app.route("/post/<id_foto>", methods=["GET", "POST"])
 @login_required 
 def post(id_foto):
-    usuario = current_user
     foto = Foto.query.get(int(id_foto))
+    dono_post = foto.usuario 
+    if foto == None:
+        return redirect(url_for('feed'))
     if request.method == "POST" and "search" in request.form:
         pesquisa = request.form['search']
-        return redirect(url_for("search", pesquisa=pesquisa, usuario=usuario))
+        return redirect(url_for("search", pesquisa=pesquisa))
     tags = foto.tags.split('#')[1:]
+    title_words = foto.titulo.split()
     fotos_relacionados = []
     for tag in tags:
-        fotos = Foto.query.filter(Foto.tags.like("%{}%".format(tag)), Foto.id!=id_foto).all()
+        fotos = Foto.query.filter((Foto.tags.like("%{}%".format(tag)) | Foto.titulo.like("%{}%".format(tag)) | Foto.descricao.like("%{}%".format(tag))), Foto.id!=id_foto).all()
+        for i in fotos:
+            fotos_relacionados.append(i)
+    for word in title_words:
+        fotos = Foto.query.filter((Foto.tags.like("%{}%".format(word)) | Foto.titulo.like("%{}%".format(word)) | Foto.descricao.like("%{}%".format(word))), Foto.id!=id_foto).all()
         for i in fotos:
             fotos_relacionados.append(i)
 
     fotos_relacionados = list(set(fotos_relacionados))
     shuffle(fotos_relacionados)
 
-    dono_post = foto.usuario 
+    
     if request.method == "POST" and "salvar" in request.form:
         if request.form["salvar"] == "meus_pins":
             salvarfoto = SalvarFoto(id_usuario=current_user.id, foto_salva=foto.id)
@@ -174,8 +202,26 @@ def post(id_foto):
         nova_pasta = Pasta(id_usuario=current_user.id, titulo=nome_pasta)
         database.session.add(nova_pasta)
         database.session.commit()
+    if request.method == "POST" and "excluir_foto" in request.form:
+        caminho_foto = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                                app.config["UPLOAD_FOLDER"],
+                                foto.imagem)
+        database.session.delete(foto)
+        database.session.commit()
+        os.remove(caminho_foto)
+        return redirect(url_for('perfil', username=current_user.username))
+    if request.method == "POST" and "editar" in request.form:
+        novo_titulo = request.form['novo_titulo']
+        nova_descricao = request.form['nova_descricao']
+        if novo_titulo != foto.titulo:
+            foto.titulo = novo_titulo 
+            database.session.commit()
+        if nova_descricao != foto.descricao:
+            foto.descricao = nova_descricao 
+            database.session.commit()
+        return redirect(url_for('post', id_foto=foto.id))
     salvo = SalvarFoto.query.filter(SalvarFoto.id_usuario==current_user.id, SalvarFoto.foto_salva==foto.id).first()
-    return render_template("post.html", usuario=usuario, foto=foto, dono_post=dono_post, fotos=fotos_relacionados, salvo=salvo)
+    return render_template("post.html", foto=foto, dono_post=dono_post, fotos=fotos_relacionados, salvo=salvo)
 
 
 @app.route("/criar_post", methods=["GET", "POST"])
@@ -212,11 +258,11 @@ def criar_post():
     return render_template("criarpost.html", usuario=current_user, form=form_foto, tag_list=None, tag_usuario=tag_usuario)
 
 
-@app.route("/configuracao", methods=["POST", "GET"])
-@login_required
-def configuracao():
-    form_foto_perfil = FormFotoPerfil()
+# @app.route("/configuracao", methods=["POST", "GET"])
+# @login_required
+# def configuracao():
     nome_pasta = "fotos_perfil"
+    form_foto_perfil = FormFotoPerfil()
     if form_foto_perfil.validate_on_submit():
         arquivo = form_foto_perfil.foto.data
         print(arquivo.filename)

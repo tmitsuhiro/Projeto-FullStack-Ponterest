@@ -34,10 +34,12 @@
                     {% endif %}
                 </div>
         
-                {{dono_pasta.foto_perfil}}
+                <a class="icone_perfil2" href="{{ url_for('perfil', username=dono_pasta.username) }}">
+                    <img  src="{{ url_for('static', filename='fotos_perfil/{}'.format(dono_pasta.foto_perfil)) }}"/>
+                </a>
                 
             </div>
-            <p class="qtd_fotos">{{qtd_fotos}}</p>
+            <p class="qtd_fotos">{{qtd_fotos}} fotos</p>
         
             {% include 'fotos_container.html' %}
         </main>

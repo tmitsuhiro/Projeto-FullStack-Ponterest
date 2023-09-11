@@ -62,6 +62,10 @@ a > .foto {
     border-radius: 20px;
 }
 
+.icone_perfil {
+    object-fit: cover;
+}
+
 .usuario {
     display: flex;
     color: black;
@@ -105,11 +109,11 @@ a > .foto {
         {% if foto.titulo %}
             <a href="{{ url_for('post', id_foto=foto.id) }}"><p class="foto_titulo">{{ foto.titulo }}</p></a>
         {% endif %}
-        <a class="usuario" href="{{ url_for('perfil', username=usuario.username) }}">
-            {% if current_user.foto_perfil != "vazio" %}
+        <a class="usuario" href="{{ url_for('perfil', username=foto.usuario.username) }}">
+            {% if foto.usuario.foto_perfil != "vazio" %}
                 <img class="icone_perfil" src="{{ url_for('static', filename='fotos_perfil/{}'.format(foto.usuario.foto_perfil)) }}"/>
             {% else %}
-                <a class="icone_perfil" href="{{ url_for('perfil', username=usuario.username) }}"><p > {{ usuario.username[0].upper() }}</p></a>
+                <p class="icone_perfil"> {{ foto.usuario.username[0].upper() }}</p>
             {% endif %}
             <p class="username">{{foto.usuario.username}}</p>
         </a>

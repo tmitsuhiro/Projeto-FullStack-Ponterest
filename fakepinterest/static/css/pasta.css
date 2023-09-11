@@ -113,3 +113,24 @@
 .inativo {
     filter: brightness(50%);
 }
+
+.icone_perfil2 {
+  border: 5px solid rgb(170, 170, 170);;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-top: 30px;
+}
+
+.icone_perfil2 > img{
+  width: 100%;
+  height: 100%;
+  object-fit:cover; 
+}
+
+.qtd_fotos {
+  margin-left: 50px;
+  font-size: 30px;
+  font-weight: 500;
+}

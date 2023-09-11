@@ -22,73 +22,128 @@ main {
 }
 
 .janela_criar_pasta {
-width: 500px;
-height: 300px;
-border-radius: 20px;
-border: 2px solid var(--main-gray);
-display: none;
-position: absolute;
-top: 30%;
-left: calc(50% - 250px);
-z-index: 999;
-background-color: white;
+    width: 500px;
+    height: 300px;
+    border-radius: 20px;
+    border: 2px solid var(--main-gray);
+    display: none;
+    position: absolute;
+    top: 30%;
+    left: calc(50% - 250px);
+    z-index: 999;
+    background-color: white;
 }
 
-.janela_criar_pasta > P {
-margin-left: 55px;
-font-size: 18px;
+.janela_editar_foto {
+    width: 500px;
+    height: 600px;
+    border-radius: 20px;
+    border: 2px solid var(--main-gray);
+    display: none;
+    position: absolute;
+    top: 10%;
+    left: calc(50% - 250px);
+    z-index: 999;
+    background-color: white;
 }
 
-.titulo_criar_pasta {
-margin: 20px auto;
-color: rgb(42, 42, 42);
-width: max-content;
+.janela_criar_pasta > p {
+    margin-left: 55px;
+    font-size: 18px;
+    }
+.janela_editar_foto P {
+    margin-left: 55px;
+    font-size: 18px;
 }
 
-.input_nome_pasta {
-display: block;
-outline: none;
-height: 45px;
-border: 3px solid var(--main-gray);
-width: 80%;
-border-radius: 15px;
-margin: 10px auto;
+.titulo_criar_pasta, .titulo_editar_foto {
+    margin: 20px auto;
+    color: rgb(42, 42, 42);
+    width: max-content;
+    }
+
+.input_nome_pasta, .input_titulo_foto{
+    display: block;
+    outline: none;
+    height: 45px;
+    border: 3px solid var(--main-gray);
+    width: 80%;
+    border-radius: 15px;
+    margin: 10px auto;
 }
-.input_nome_pasta:focus{
-border:4px solid rgb(114, 171, 205);
+
+.input_descricao_foto {
+    display: block;
+    outline: none;
+    height: 120px;
+    border: 3px solid var(--main-gray);
+    width: 80%;
+    border-radius: 15px;
+    margin: 10px auto;
+    white-space: pre;
 }
+
+.input_nome_pasta:focus{border:4px solid rgb(114, 171, 205);}
+.input_titulo_foto:focus{border:4px solid rgb(114, 171, 205);}
+.input_descricao_foto:focus{border:4px solid rgb(114, 171, 205);}
+
 
 .botao_criar_pasta2 {
-display: block;
-margin-top: 40px;
-margin-left: auto;
-margin-right: 20px;
-border: none;
-border-radius: 18px;
-padding: 10px;
-background-color: var(--main-gray);
-cursor: pointer;
+    display: block;
+    margin-top: 40px;
+    margin-left: auto;
+    margin-right: 20px;
+    border: none;
+    border-radius: 18px;
+    padding: 10px;
+    background-color: var(--main-gray);
+    cursor: pointer;
+}
+
+.botao_excluir_foto, .salvar_alteracao {
+    margin-top: 40px;
+    margin-left: 30px;
+    margin-right: 30px;
+    border: none;
+    border-radius: 18px;
+    padding: 10px;
+    background-color: var(--main-gray);
+    cursor: pointer;
+}
+.salvar_alteracao {
+    background-color: var(--main-purple);
+    color: white;
+
+}
+
+.coluna_botao {
+    display: flex;
+    justify-content: space-between;
 }
 
 .container_foto {
-height: max-content;
-display: flex;
-width: 1000px;
-margin: 0px auto;
-border-radius: 30px;
-box-shadow: 0px 1px 7px rgb(234, 234, 234);
-background-color: white;
+    height: max-content;
+    display: flex;
+    width: 1000px;
+    margin: 0px auto;
+    border-radius: 30px;
+    box-shadow: 0px 1px 7px rgb(234, 234, 234);
+    background-color: white;
 }
 
 /* pasta bar  */
     .pasta_bar {
         display: flex;
-        justify-content: end;
+        justify-content: space-between;
         align-items: center;
     }
-    .pasta_bar >*{
+    .coluna_pasta >*{
         margin-left: 10px;
         border: none;
+    }
+
+    .coluna_pasta {
+        display: flex;
     }
 
     .botao_salvar2, .botao_salvo {
@@ -122,12 +177,21 @@ background-color: white;
         cursor: pointer;
     }
 
+    .botao_editar_foto {
+        padding: 5px 10px;
+        cursor: pointer;
+        border: none;
+        border-radius: 10px;
+        background-color: var(--main-gray);
+    }
+
 
 .main_foto {
     width: 40%;
     margin: 20px;
     border-radius: 30px;
     object-fit: contain;
+    border: 1px solid var(--main-gray);
   }
 
 .sobre_foto {

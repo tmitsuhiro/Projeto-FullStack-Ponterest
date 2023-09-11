@@ -25,26 +25,28 @@
             
         </div>
 
-        {% block script %}
         <script>
             let search_bar = document.querySelector(".search_bar")
-            let pagina = document.querySelector("body")
+            let pagina = document.querySelector(".container")
+            let menu_header = document.querySelector(".dropdown_menu");
+            let seta_header = document.querySelector(".seta_header");
             
             pagina.onclick = function(e){
                 if (!search_bar.contains(e.target)) {
                     if (search_bar.value !="") {
                     search_bar.value = ""
-                    }
-                }
+                    }}
+                if (menu_header.style.display == "block" && !menu_header.contains(e.target) && !seta_header.contains(e.target)){
+                menu_header.style.display = "none";
+                }   
             };
 
-            function abrirJanelaPastas(num) {
-                console.log('oi', num)
-
-            }
+            seta_header.onclick = function(){
+            menu_header.style.display = "block";
+            };
+    
 
         </script>
-        {% endblock %}
 
     </body>
 

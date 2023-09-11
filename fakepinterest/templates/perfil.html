@@ -19,6 +19,22 @@
         </form>
     </div>
 
+    <div class="janela_foto_perfil">
+        <h2 class="titulo_editar_foto_perfil">Editar foto perfil</h2>
+        <img class="imagem_foto" src="{{ url_for('static', filename='fotos_perfil/{}'.format(current_user.foto_perfil)) }}"/>
+
+        <form action="#" method="post" class="mudar_foto" enctype="multipart/form-data">
+            {{ form.csrf_token }}
+            <label class="label_inputfoto" for="input_foto"><p>Escolher imagem</p></label>
+            {{ form.foto(class="input_foto", id="input_foto") }}
+            <div class="coluna_botao">
+                <buton class="botao_cancelar">cancelar</buton>
+                {{ form.botao_confirmacao(class="botao_editar_foto_perfil2") }}
+            </div>
+            
+        </form>
+    </div>
+
     <!-- <div class="janela_edit_pasta">
         <h2 class="titulo_criar_pasta">Editar pasta</h2>
         <p>Nome</p>
@@ -35,13 +51,29 @@
         {% include 'header.html' %}
         <main>
             <div class="container_usuario">
-                <a class="icone_perfil2" href="{{ url_for('configuracao') }}">
-                    <img  src="{{ url_for('static', filename='fotos_perfil/{}'.format(current_user.foto_perfil)) }}"/>
-                </a>
+                
+                <div class="foto_perfil">
+                    <div class="icone_perfil2">
+                        {% if usuario.foto_perfil != "vazio" %}
+                            <img  src="{{ url_for('static', filename='fotos_perfil/{}'.format(usuario.foto_perfil)) }}"/>
+                        {% else %}
+                            <p > {{ usuario.username[0].upper() }}</p>
+                        {% endif %}
+                        {% if usuario == current_user%}
+                            <i class="fa-solid fa-pen botao_editar_foto_perfil"></i>
+                        {% endif %}
+                    </div>
+                </div>
+                <!-- <div class="icone_perfil2">
+                    <p > {{ usuario.username[0].upper() }}</p>
+                    {% if usuario == current_user%}
+                        <i class="fa-solid fa-pen botao_editar_foto_perfil"></i>
+                    {% endif %}
+                    </div>
+                </div> -->
                 <p class="username">@{{ usuario.username }}</p>
-                {% if usuario.id == current_user.id %}
-                <a class="editar_perfil" href="{{ url_for('configuracao') }}"><p>Editar Perfil</p></a>
-                {% endif %}
+                <!-- {% if usuario.id == current_user.id %}
+                {% endif %} -->
         
         
         
@@ -58,12 +90,23 @@
         
             <div class="container_criados" id="container_criados">
                 {% for foto in usuario.fotos %}
-                <div class="foto"><img src="{{ url_for('static', filename='fotos_posts/{}'.format(foto.imagem)) }}"/></div>
+                <div class="box">
+                    <div class="foto_box">
+                        <a href="{{ url_for('post', id_foto=foto.id) }}">
+                            <img class="foto" src="{{ url_for('static', filename='fotos_posts/{}'.format(foto.imagem)) }}"/>
+                        </a>
+                    </div>
+                    {% if foto.titulo %}
+                        <a href="{{ url_for('post', id_foto=foto.id) }}"><p class="foto_titulo">{{ foto.titulo }}</p></a>
+                    {% endif %}
+                </div>
                 {% endfor %}
             </div>
-        
+            
             <div class="botao_plus_div">
+                {% if usuario == current_user %}
                 <p class="botao_plus">+</p>
+                {% endif %}
             </div>
             <div class="container_pastas" id="container_salvos">
                 <a href="{{ url_for('pasta', username=usuario.username, nome_pasta='salvos') }}">
@@ -90,7 +133,7 @@
     </div>
     
     
-    <script type='text/javascript' src="{{ url_for('static', filename='js/index.js') }}">
+    <script type='text/javascript' src="{{ url_for('static', filename='js/perfil.js') }}">
 
     </script>
 </body>

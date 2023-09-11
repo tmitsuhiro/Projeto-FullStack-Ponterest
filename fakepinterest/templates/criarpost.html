@@ -1,49 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel='stylesheet' type='text/css' href='{{ url_for("static", filename="css/criarfoto.css") }}'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 </head>
     <body>
+  
         {% include 'header.html' %}
-
         <main>
             <div class="container_criarfoto">
-                
-            
+        
+        
                 <form class="form_criarfoto" method="POST" enctype="multipart/form-data">
                     {{ form.csrf_token }}
-
-                    
+        
                     <label class="label_inputfoto" for="input_foto"><p>Clique e carregue uma imagem</p></label>
                     <div class="box_imagem">
                         <img class="imagem_foto" src="">
                         <div class="botao_excluir"><P>&times;</P></div>
                     </div>
-
                     <div class="preencher">
-
                         <div class="pasta">
                             <p>Pasta:</p>
                             <select name="pasta" class="escolher_pasta">
                                 <option value="nenhum">Nenhum</option>
                             {% for pasta in usuario.pastas %}
-                                <option  value="{{pasta.titulo}}">{{pasta.titulo}}</option>  
+                                <option  value="{{pasta.titulo}}">{{pasta.titulo}}</option>
                             {% endfor %}
                             </select>
                         </div>
-                        
-
+        
                         {{ form.foto(class="input_foto", id="input_foto") }}
-
                         <div class="escolher_pasta"></div>
-                        
+        
                         {{  form.titulo(class="input_titulo input_texto", placeholder="Adicione um título") }}
-
                         <hr>
-
                         <div class="usuario">
                             <div class="icone_perfil_form">
                                 {% if current_user.foto_perfil != "vazio" %}
@@ -54,18 +49,18 @@
                             </div>
                             {{ current_user.username }}
                         </div>
-
                         {{  form.descricao(class="input_descricao input_texto", placeholder="Adicione uma descrição") }}
                         <hr>
-                        
+        
                         <iframe class="tags_iframe" src="{{ url_for('tag_manager')}}" ></iframe>
                         {{ form.botao_confirmacao(class="botao_criarfoto") }}
                     </div>
-                    
+        
                 </form>
-            
+        
             </div>
         </main>
+        
 
 
 
@@ -74,7 +69,11 @@
             box = document.querySelector(".box_imagem"),
             input = document.querySelector(".input_foto"),
             label = document.querySelector(".label_inputfoto"),
-            botao = document.querySelector(".botao_excluir");
+            botao = document.querySelector(".botao_excluir"),
+            search_bar = document.querySelector(".search_bar"),
+            pagina = document.querySelector("body"),
+            menu_header = document.querySelector(".dropdown_menu"),
+            seta_header = document.querySelector(".seta_header");
 
             input.addEventListener("change", () => {
                 image.src = URL.createObjectURL(input.files[0]);
@@ -88,7 +87,20 @@
                 label.classList.remove("inativo");
                 box.classList.remove("ativo")
                 botao.classList.remove("ativo")
-            }
+            };
+            pagina.onclick = function(e){
+            if (!search_bar.contains(e.target)) {
+                if (search_bar.value !="") {
+                    search_bar.value = ""
+                }};
+            if (menu_header.style.display == "block" && !menu_header.contains(e.target) && !seta_header.contains(e.target)){
+                menu_header.style.display = "none";
+            };   
+            };
+
+            seta_header.onclick = function(){
+            menu_header.style.display = "block";
+            };
 
 
         </script>
