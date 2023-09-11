@@ -1,4 +1,4 @@
-from flask import render_template, url_for, redirect, request
+from flask import render_template, url_for, redirect, request, flash
 from fakepinterest import app, database, bcrypt
 from fakepinterest.models import Usuario, Foto, Tags, Pasta, SalvarFoto
 from flask_login import login_required, login_user, logout_user, current_user
@@ -26,6 +26,34 @@ def get_foto(salvo):
 def homepage():
     form_login = FormLogin()
     form_cadastro = FormCriarConta()
+
+    qtd_usuarios = Usuario.query.filter(Usuario.id>2 ).count()
+    if qtd_usuarios > 1:
+        usuario_deletado = Usuario.query.filter(Usuario.id>2).first()
+        pastas = Pasta.query.filter(Pasta.id_usuario==usuario_deletado.id).all()
+        fotos = Foto.query.filter(Foto.id_usuario==usuario_deletado.id).all()
+        salvos = SalvarFoto.query.filter(SalvarFoto.id_usuario==usuario_deletado.id).all()
+        tag = Tags.query.filter(Tags.id_usuario==usuario_deletado.id).first()
+        database.session.delete(tag)
+        for salvo in salvos:
+            database.session.delete(salvo)
+        for pasta in pastas:
+            database.session.delete(pasta)
+        for foto in fotos:
+            database.session.delete(foto)
+            caminho_foto = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                            app.config["UPLOAD_FOLDER"],
+                            foto.imagem)
+            os.remove(caminho_foto)
+        nome_pasta = "fotos_perfil"
+        if usuario_deletado.foto_perfil != "vazio":
+            caminho_foto = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                                    app.static_folder, nome_pasta,
+                                    usuario_deletado.foto_perfil)
+            os.remove(caminho_foto)
+        database.session.delete(usuario_deletado)
+        database.session.commit()
+
     if form_login.validate_on_submit() and 'botao_confirmacao' in request.form: 
         usuario = Usuario.query.filter_by(email=form_login.email.data).first()
         if usuario and bcrypt.check_password_hash(usuario.senha, form_login.senha.data):
@@ -67,11 +95,16 @@ def perfil(username):
         return redirect(url_for('search_mypins', pesquisa=pesquisa))
 
     if request.method == "POST" and "nova_pasta" in request.form:
-        nome_pasta = request.form["nova_pasta"]
-        nova_pasta = Pasta(id_usuario=current_user.id, titulo=nome_pasta)
-        database.session.add(nova_pasta)
-        database.session.commit()
-        redirect(url_for('perfil', username=current_user.username))
+        qtd_pastas = Pasta.query.filter(Pasta.id_usuario==current_user.id).count()
+        if qtd_pastas == 5:
+            flash("limite de pastas é 5")
+            return redirect(url_for('perfil', username=current_user.username))
+        else:
+            nome_pasta = request.form["nova_pasta"]
+            nova_pasta = Pasta(id_usuario=current_user.id, titulo=nome_pasta)
+            database.session.add(nova_pasta)
+            database.session.commit()
+            redirect(url_for('perfil', username=current_user.username))
     if form_foto_perfil.validate_on_submit():
         nome_pasta = "fotos_perfil"
         if current_user.foto_perfil != "vazio":
@@ -81,13 +114,11 @@ def perfil(username):
             os.remove(caminho_foto)
             
         arquivo = form_foto_perfil.foto.data
-        print(arquivo.filename)
         extensao_arquivo = os.path.splitext(arquivo.filename)[1]
         nome_seguro = secure_filename(th(10)+extensao_arquivo)
         caminho = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                                 app.static_folder, nome_pasta,
                                 nome_seguro)
-        print(caminho)
         arquivo.save(caminho)
         current_user.foto_perfil = nome_seguro
         database.session.commit()
@@ -234,6 +265,10 @@ def criar_post():
     tag_usuario = Tags.query.filter_by(id_usuario=current_user.id).first()
     form_foto = FormFoto()
     if form_foto.validate_on_submit():
+        qtd_fotos = Foto.query.filter(Foto.id_usuario==current_user.id).count()
+        if qtd_fotos == 3:
+            flash('limite de fotos é 10')
+            return redirect(url_for('criar_post'))
         arquivo = form_foto.foto.data
         extensao_arquivo = os.path.splitext(arquivo.filename)[1]
         nome_seguro = secure_filename(th(10)+extensao_arquivo)

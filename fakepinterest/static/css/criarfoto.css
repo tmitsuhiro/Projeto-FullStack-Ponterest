@@ -228,3 +228,13 @@ border: none;
     object-fit: cover;
     margin-top: 0px;
 }
+
+.erro {
+    display: block;
+    color: red;
+    font-size: 40px;
+    font-weight: 600;
+    margin: 0px auto;
+    width: max-content;
+    position: absolute;
+}

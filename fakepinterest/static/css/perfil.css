@@ -11,8 +11,8 @@
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Helvetica, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", メイリオ, Meiryo, "ＭＳ Ｐゴシック", Arial, sans-serif;
   }
 
-body {
-    height: 100vh;
+.pagina {
+    min-height: 100vh;
     background-color: white;
 }
 
@@ -369,4 +369,13 @@ a > .foto {
 .botao_editar_foto_perfil:hover {
     opacity: 1;
     background-color: var(--main-gray) ;
+}
+
+.erro {
+    display: block;
+    color: red;
+    font-size: 40px;
+    font-weight: 600;
+    margin: 0px auto;
+    width: max-content;
 }
