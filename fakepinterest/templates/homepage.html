@@ -7,8 +7,9 @@
         Ponterest
     </title>
     <link rel='stylesheet' type='text/css' href='{{ url_for("static", filename="css/home.css") }}'>
-
+    
 </head>
+
 
 {% block body %}
 <body>   
@@ -64,11 +65,11 @@
                 let pagina = document.querySelector(".container")
                 let janela_login = document.querySelector(".janela_login")
                 let janela_cadastro = document.querySelector(".janela_cadastro")
-
+        
                 if(janela_login.classList.contains("aberto") || janela_cadastro.classList.contains("aberto")){
                         pagina.classList.toggle("inativo")
                         }
-
+        
                 botao_login.onclick = function(){
                         if(!janela_cadastro.classList.contains("aberto")){
                         janela_login.classList.toggle("aberto")
@@ -92,7 +93,7 @@
                 janela_cadastro.classList.remove("aberto");
                 }                
                 }
-        </script>
+        </script>        
 </body>
 {% endblock %}
 </html>

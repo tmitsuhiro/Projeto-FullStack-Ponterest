@@ -13,30 +13,15 @@
     <body>
         
         <div class="container">
-
-            {% include'header.html' %}
-            
-            {% block main %}<main class="feed">
-                <div class="fotos_container">
-
-                    {% for foto in fotos %}
-                    <div class="box">
-                        <div class="foto_box">
-                            <div class="pasta_bar">
-                                <button class="botao_escolher_pasta" value="Meus pins">Meus pins</button>
-                                <i class="fa-sharp fa-solid fa-angle-down fa-1x seta"></i>
-                                <button class="botao_salvar" value="Salvar">Salvar</button>
-                            </div>
-                            <a href="{{ url_for('post', id_foto=foto.id) }}">
-                                <img class="foto" src="{{ url_for('static', filename='fotos_posts/{}'.format(foto.imagem)) }}"/>
-                            </a>
-                        </div>
-                        <div class="usuario">usuario</div>
-                    </div>
-                    {% endfor %}
-                </div>
+        
+                {% include'header.html' %}
                 
-            </main>{% endblock %}
+            <main class="feed">
+
+                {% include 'fotos_container.html' %}
+                
+                
+            </main>
             
         </div>
 
@@ -51,6 +36,11 @@
                     search_bar.value = ""
                     }
                 }
+            };
+
+            function abrirJanelaPastas(num) {
+                console.log('oi', num)
+
             }
 
         </script>

@@ -12,6 +12,9 @@
         font-weight: 500;
         overflow: hidden;
         box-shadow: 0px 1px 7px rgb(234, 234, 234);
+        position: absolute;
+        top: 18%;
+        left: calc(50% - 180px);
     }
 
     .janela_pasta > p {
@@ -44,11 +47,11 @@
 
     .pasta:hover {background-color: var(--main-gray);}
     
-    .pasta > img {
+    .pasta > img, .sem_foto {
         height: 40px;
         width: 40px;
         object-fit: cover;
-        background-color: blue;
+        background-color: rgb(209, 209, 209);
         border-radius: 10px;
     }
 
@@ -77,6 +80,7 @@
         justify-content: flex-start;
         cursor: pointer;
         box-shadow: 0px 1px 7px rgb(234, 234, 234);
+        cursor: pointer;
     }
     .criar_pasta *{
         margin: 10px;
@@ -86,38 +90,46 @@
         background-color: var(--main-gray);
     }
 
-    .botao_criarpasta {
+    .botao_criar_pasta {
         font-size: 40px;
         border: none;
         border-radius: 10px;
         padding: 5px 16px;
+        cursor: pointer;
     }
+
+
     
 </style>
 
 
 
-<div class="janela_pasta">
+<div class="janela_pasta" style="display: none;">
 
     <p>Pastas</p>
 
-    <form class="escolher_pasta" method="get">
-
-            <label for="pasta_1">
+    <form class="escolher_pasta" method="post">
+        {% for pasta in current_user.pastas%}
+            <label for="pasta_{{pasta.id}}">
                 <div class="pasta">
-                    <img src="">
-                        <p class="nome_pasta"> Pasta 1</p>
+                    {% if pasta.fotos_salvas %}
+                        <img src="{{ url_for('static', filename='fotos_posts/{}'.format(pasta.fotos_salvas[0].foto.imagem)) }}">
+                    {% else %}
+                        <div class="sem_foto"></div>
+                    {% endif %}
+                        <p class="nome_pasta"> {{pasta.titulo}}</p>
                         <button class="botao_salvar">Salvar</button>
-                        <input class="input_salvar" type="submit" name="salvar" value="pasta1" id="pasta_1">
+                        <input class="input_salvar" type="submit" name="salvar" value="{{pasta.id}}" id="pasta_{{pasta.id}}">
                 </div>
-            </label>
-    
-            
-        
+            </label> 
+        {% endfor %}
     </form>
+
+
     <div class="criar_pasta">
-        <button class="botao_criarpasta">+</button>
+        <button name="criar_pasta" class="botao_criar_pasta" id="criar_pasta">+</button>
         <p>Criar pasta</p>
     </div>
+
             
 </div>

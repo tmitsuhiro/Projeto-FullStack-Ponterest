@@ -1,13 +1,48 @@
-{% extends "feed.html" %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ponterest</title>
+    <link rel='stylesheet' type='text/css' href='{{ url_for("static", filename="css/pasta.css") }}'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-{% block main %}
+</head>
+<body onload="init();">
+    <div class="janela_editar_pasta">
+        <h2 class="titulo_editar_pasta">Editar sua pasta</h2>
+        <p>Nome</p>
+        <form  method="post">
+            <div class="box_input">
+                <input class="input_nome_pasta" type="text" name="novo_nome" value="{{pasta.titulo}}">
+            </div>
+            <div class="coluna_botao">
+                <button name="excluir_pasta" class="botao_excluir_pasta">Excluir pasta</button>
+                <button name="editar" class="salvar_alteracao">Editar</button>
+            </div>
+        </form>
+    </div>
 
-{% for foto in fotos %}
-
-    <a href="{{ url_for('post', id_foto=foto.id) }}">
-        <img class="image" src="{{ url_for('static', filename='fotos_posts/{}'.format(foto.imagem)) }}"/>
-    </a>
-
-{% endfor %}
-
-{% endblock %}
+    <div class="pagina">
+        {% include 'header.html' %}
+        <main>
+            <div class="dados_pasta">   
+                <div class="title_column">
+                    <h1 class="pasta_titulo">{{ pasta.titulo }}  </h1>
+                    {% if current_user == dono_pasta %}
+                        <i id="pen" class="fa-solid fa-pen botao_editar_pasta"></i>
+                    {% endif %}
+                </div>
+        
+                {{dono_pasta.foto_perfil}}
+                
+            </div>
+            <p class="qtd_fotos">{{qtd_fotos}}</p>
+        
+            {% include 'fotos_container.html' %}
+        </main>
+    </div>
+    
+    <script type='text/javascript' src="{{ url_for('static', filename='js/pasta.js') }}"></script>
+</body>
+</html>

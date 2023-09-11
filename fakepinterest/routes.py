@@ -64,12 +64,13 @@ def perfil(username):
     if request.method == "POST" and "search" in request.form:
         pesquisa = request.form['search']
         return redirect(url_for('search_mypins', pesquisa=pesquisa))
-    
-    if request.method == "POST" and "nome_pasta" in request.form:
-        nome_pasta = request.form["nome_pasta"]
+
+    if request.method == "POST" and "nova_pasta" in request.form:
+        nome_pasta = request.form["nova_pasta"]
         nova_pasta = Pasta(id_usuario=current_user.id, titulo=nome_pasta)
         database.session.add(nova_pasta)
         database.session.commit()
+        redirect(url_for('perfil', username=current_user.username))
     return render_template("perfil.html", usuario=usuario_perfil, pastas=pastas_perfil, fotos_salvas=fotos_salvas)
 
 
@@ -79,11 +80,26 @@ def pasta(username, nome_pasta):
     dono_pasta = Usuario.query.filter(Usuario.username==username).first()
     pasta = Pasta.query.filter(Pasta.titulo==nome_pasta, Pasta.id_usuario==dono_pasta.id).first()
     if nome_pasta == "salvos":
-        fotos = dono_pasta.fotos
+        fotos_salvas = SalvarFoto.query.filter(SalvarFoto.id_usuario==dono_pasta.id).all()
+        fotos = [foto_salva.foto for foto_salva in fotos_salvas]
+        qtd_fotos = len(fotos)
     else:
         fotos_salvas = SalvarFoto.query.filter(SalvarFoto.pasta_salva==pasta.id, SalvarFoto.id_usuario==dono_pasta.id).all()
         fotos = [foto_salva.foto for foto_salva in fotos_salvas]
-    return render_template("pasta.html", usuario=current_user, fotos=fotos)
+        qtd_fotos = len(fotos)
+    if request.method == "POST" and "excluir_pasta" in request.form:
+        salvos_na_pasta = SalvarFoto.query.filter(SalvarFoto.pasta_salva==pasta.id).all()
+        for salvo in salvos_na_pasta:
+            database.session.delete(salvo)
+        database.session.delete(pasta)
+        database.session.commit()
+        return redirect(url_for('perfil', username=current_user.username))
+    if request.method == "POST" and "editar" in request.form:
+        novo_nome = request.form["novo_nome"]
+        pasta.titulo = novo_nome
+        database.session.commit()
+        return redirect(url_for('pasta', username=dono_pasta.username, nome_pasta=novo_nome))
+    return render_template("pasta.html", usuario=current_user, fotos=fotos, dono_pasta=dono_pasta, pasta=pasta, qtd_fotos = qtd_fotos)
 
 
 
@@ -91,12 +107,17 @@ def pasta(username, nome_pasta):
 @login_required
 def feed():
     usuario = current_user
-    if request.method == "POST":
+    fotos = Foto.query.order_by(func.random()).all()
+    fotos2 = fotos
+    if request.method == "POST" and "search" in request.form:
         pesquisa = request.form['search']
         return redirect(url_for("search", pesquisa=pesquisa, usuario=usuario))
-    
-    fotos = Foto.query.order_by(func.random()).all()
+    if request.method == "POST" and "salvar" in request.form:
+        print('oi')
+        return render_template("feed.html", fotos=fotos2, usuario=usuario)
     return render_template("feed.html", fotos=fotos, usuario=usuario)
+
+    
 
 
 @app.route('/search/<pesquisa>', methods=["GET", "POST"])
@@ -134,14 +155,27 @@ def post(id_foto):
     shuffle(fotos_relacionados)
 
     dono_post = foto.usuario 
-    if request.method == "POST" and "save_pasta" in request.form:
-        nome_pasta = request.form['save_pasta']
-        pasta = Pasta.query.filter(Pasta.titulo==nome_pasta, Pasta.id_usuario==current_user.id).first()
-        salvarfoto = SalvarFoto(id_usuario=current_user.id, foto_salva=foto.id, pasta_salva=pasta.id)
-        database.session.add(salvarfoto)
+    if request.method == "POST" and "salvar" in request.form:
+        if request.form["salvar"] == "meus_pins":
+            salvarfoto = SalvarFoto(id_usuario=current_user.id, foto_salva=foto.id)
+            database.session.add(salvarfoto)
+            database.session.commit()
+        else:
+            id_pasta = request.form['salvar']
+            salvarfoto = SalvarFoto(id_usuario=current_user.id, foto_salva=foto.id, pasta_salva=id_pasta)
+            database.session.add(salvarfoto)
+            database.session.commit()
+    if request.method == "POST" and "excluir_pin" in request.form:
+        dado_salvo = SalvarFoto.query.filter(SalvarFoto.id_usuario==current_user.id, SalvarFoto.foto_salva==foto.id).first()
+        database.session.delete(dado_salvo)
+        database.session.commit()
+    if request.method == "POST" and "nova_pasta" in request.form:
+        nome_pasta = request.form["nova_pasta"]
+        nova_pasta = Pasta(id_usuario=current_user.id, titulo=nome_pasta)
+        database.session.add(nova_pasta)
         database.session.commit()
     salvo = SalvarFoto.query.filter(SalvarFoto.id_usuario==current_user.id, SalvarFoto.foto_salva==foto.id).first()
-    return render_template("post.html", usuario=usuario, foto=foto, dono_post=dono_post, fotos_relacionados=fotos_relacionados, salvo=salvo)
+    return render_template("post.html", usuario=usuario, foto=foto, dono_post=dono_post, fotos=fotos_relacionados, salvo=salvo)
 
 
 @app.route("/criar_post", methods=["GET", "POST"])
