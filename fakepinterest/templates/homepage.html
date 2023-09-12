@@ -17,8 +17,8 @@
         <div class="janela_{{erro}} aberto janela">{% include '{}.html'.format(erro) %}</div>
 
         <div class="janela_cadastro janela">{% include 'cadastro.html' %}</div>
-
-        {% elif erro and erro == "cadastro" %}
+        {% endif %}
+        {% if erro and erro == "cadastro" %}
 
         <div class="janela_{{erro}} aberto janela">{% include '{}.html'.format(erro) %}</div>
 

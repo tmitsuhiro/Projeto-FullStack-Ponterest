@@ -11,7 +11,7 @@
                 {% if form_cadastro.email.errors %}
                         {{ form_cadastro.email(class="box", placeholder="Email") }}
                         {% for erro in form_cadastro.email.errors %}
-                                <p>{{ erro }}</p>
+                                <p class="msg_erro">{{ erro }}</p>
                         {% endfor %}
                 {% else %}
                         {{ form_cadastro.email(class="box", placeholder="Email") }}
@@ -21,7 +21,7 @@
                 {% if form_cadastro.username.errors %}
                         {{ form_cadastro.username(class="box", placeholder="Nome de usuário") }}
                         {% for erro in form_cadastro.username.errors %}
-                                <p>{{ erro }}</p>
+                                <p class="msg_erro">{{ erro }}</p>
                         {% endfor %}
                 {% else %}
                         {{ form_cadastro.username(class="box", placeholder="Nome de usuário") }}
@@ -31,7 +31,7 @@
                 {% if form_cadastro.senha.errors %}
                         {{ form_cadastro.senha(class="box", placeholder="Senha") }}
                         {% for erro in form_cadastro.senha.errors %}
-                                <p>{{ erro }}</p>
+                                <p class="msg_erro">{{ erro }}</p>
                         {% endfor %}
                 {% else %}
                         {{ form_cadastro.senha(class="box", placeholder="Senha") }}
@@ -41,7 +41,7 @@
                 {% if form_cadastro.confirmacao_senha.errors %}
                         {{ form_cadastro.confirmacao_senha(class="box", placeholder="Senha") }}
                         {% for erro in form_cadastro.confirmacao_senha.errors %}
-                                <p>{{ erro }}</p>
+                                <p class="msg_erro">{{ erro }}</p>
                         {% endfor %}
                 {% else %}
                         {{ form_cadastro.confirmacao_senha(class="box", placeholder="Confirme a senha") }}

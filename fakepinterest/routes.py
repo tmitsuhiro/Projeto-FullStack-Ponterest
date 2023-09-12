@@ -75,7 +75,7 @@ def homepage():
         login_user(usuario, remember=True)
         return redirect(url_for('feed', id_usuario=current_user.id))
 
-    if form_cadastro.errors and 'botao_confirmacao' in request.form:
+    if form_cadastro.errors and 'botao_confirmacao2' in request.form:
         return render_template('homepage.html', form_login=form_login, form_cadastro=form_cadastro, erro="cadastro")
 
     return render_template('homepage.html', form_login=form_login, form_cadastro=form_cadastro)
