@@ -272,7 +272,7 @@ def criar_post():
     form_foto = FormFoto()
     if form_foto.validate_on_submit():
         qtd_fotos = Foto.query.filter(Foto.id_usuario==current_user.id).count()
-        if qtd_fotos == 15:
+        if qtd_fotos == 10:
             flash('limite de fotos é 10')
             return redirect(url_for('criar_post'))
         arquivo = form_foto.foto.data
