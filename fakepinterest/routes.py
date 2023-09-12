@@ -56,7 +56,7 @@ def homepage():
 
     if form_login.validate_on_submit() and 'botao_confirmacao' in request.form: 
         usuario = Usuario.query.filter_by(email=form_login.email.data).first()
-        if usuario and bcrypt.check_password_hash(usuario.senha, form_login.senha.data):
+        if usuario and bcrypt.check_password_hash(usuario.senha.encode("utf-8"), form_login.senha.data):
             login_user(usuario)
             return redirect(url_for('feed', id_usuario=current_user.id))
         
@@ -67,7 +67,7 @@ def homepage():
         return render_template('homepage.html', form_login=form_login, form_cadastro=form_cadastro, erro="login")
     
     if form_cadastro.validate_on_submit() and 'botao_confirmacao2' in request.form:
-        senha = bcrypt.generate_password_hash(form_cadastro.senha.data)
+        senha = bcrypt.generate_password_hash(form_cadastro.senha.data).decode("utf-8")
         usuario = Usuario(username=form_cadastro.username.data, 
                           senha=senha, email=form_cadastro.email.data)
         database.session.add(usuario)
