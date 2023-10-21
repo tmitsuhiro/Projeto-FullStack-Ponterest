@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        Ponterest
+    </title>
+    <link rel='stylesheet' type='text/css' href='{{ url_for("static", filename="css/home.css") }}'>
+    
+</head>
+
+
+{% block body %}
+<body>   
+        {% if erro and erro == "login" %}
+        <div class="janela_{{erro}} aberto janela">{% include '{}.html'.format(erro) %}</div>
+
+        <div class="janela_cadastro janela">{% include 'cadastro.html' %}</div>
+        {% endif %}
+        {% if erro and erro == "cadastro" %}
+
+        <div class="janela_{{erro}} aberto janela">{% include '{}.html'.format(erro) %}</div>
+
+        <div class="janela_login janela">{% include 'login.html' %}</div>
+
+        {% else %}
+        <div class="janela_login janela">{% include 'login.html' %}</div>
+
+        <div class="janela_cadastro janela">{% include 'cadastro.html' %}</div>
+
+        {% endif %}
+
+        
+        
+
+        <div class="container">
+                
+                <header>
+                        <img class="logo_header logo" src="{{ url_for('static', filename='fotos_site/logo_pinterest.png') }}">
+                        
+                        <p> Ponterest</p>
+
+
+                        <div class="botoes_header">
+                
+                                <button class="botao_login_header"> Entrar </button>
+                
+                                <button class="botao_cadastrar_header"> Criar Conta </button>
+                        </div>
+                
+                </header>
+                <main>
+                        <div class="apresentacao">
+                                
+                        </div>
+                
+                </main>
+        </div>
+
+
+        <script src="{{ url_for('static', filename='js/home.js') }}">
+                
+        </script>        
+</body>
+{% endblock %}
+</html>
